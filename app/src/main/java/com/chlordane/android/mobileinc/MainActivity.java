@@ -131,14 +131,14 @@ public class MainActivity extends AppCompatActivity
 
     private void signOut() {
         // Firebase sign out
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
 
         // Google sign out
         Auth.GoogleSignInApi.signOut(FirstActivity.mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>(){
                     @Override
                     public void onResult(@NonNull Status status) {
-                        Intent intent = new Intent(getApplicationContext(), FirstActivity.class);
+                        Intent intent = new Intent(MainActivity.this, FirstActivity.class);
                         startActivity(intent);
                     }
                 }
