@@ -2,6 +2,7 @@ package com.chlordane.android.mobileinc;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -79,9 +81,16 @@ public class FirstActivity extends AppCompatActivity implements
             Intent intent = new Intent(this, SignIn.class);
             startActivity(intent/*, TEXT_REQUEST*/);
         } else {
-            // Signed out
-            Log.d(TAG, "result.getStatus().getStatusCode() = " + Integer.toString(result.getStatus().getStatusCode()));
-            Toast.makeText(this, Integer.toString(result.getStatus().getStatusCode()), Toast.LENGTH_LONG).show();
+            int errorCode = result.getStatus().getStatusCode();
+            Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
+
+            if (errorCode == GoogleSignInStatusCodes.NETWORK_ERROR) {
+                // Handle network error
+                Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show();
+            } else {
+                // Other error codes
+                Toast.makeText(this, "Error Code: " + Integer.toString(errorCode), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
