@@ -77,7 +77,7 @@ public class FirstActivity extends AppCompatActivity implements
             Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
             // Go to next activity
             Intent intent = new Intent(this, SignIn.class);
-            startActivityForResult(intent, TEXT_REQUEST);
+            startActivity(intent/*, TEXT_REQUEST*/);
         } else {
             // Signed out
             Log.d(TAG, "result.getStatus().getStatusCode() = " + Integer.toString(result.getStatus().getStatusCode()));
