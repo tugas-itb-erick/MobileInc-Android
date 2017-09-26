@@ -14,7 +14,6 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void confirmProfile(View view) {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+        finish(); // go back to previous activity rather than create new intent
     }
 }

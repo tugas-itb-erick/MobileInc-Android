@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".FirstActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,10 +24,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignIn" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ShopActivity"
             android:label="@string/title_shop_activity"
