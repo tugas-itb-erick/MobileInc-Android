@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Mobile Inc</string>
+    <string name="sign_in">Sign in</string>
+    <string name="title_activity_sign_in">Sign_in</string>
+    <string name="confirm_profile_button">Confirm</string>
+    <string name="choose_profile_text">Choose Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_label2">Trends</string>
+    <string name="tab_label1">Home</string>
+    <string name="title_activity_main">Mobile, Inc.</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_review_cart">Review Cart</string>
+    <string name="action_settings">Setting</string>
+    <string name="title_activity_shop">Cart</string>
+    <string name="title_back">Back</string>
+    <string name="title_see_cart">Review cart</string>
+    <string name="title_clear_cart">Clear cart</string>
+</resources>

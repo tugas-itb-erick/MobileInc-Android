@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context="com.chlordane.android.mobileinc.SignIn">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="@string/choose_profile_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/chooseProfileSpinner"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/confirmProfile"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/confirm_profile_button"
+        android:onClick="confirmProfile"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/chooseProfileSpinner"
+        android:layout_toEndOf="@+id/chooseProfileSpinner" />
+
+</RelativeLayout>

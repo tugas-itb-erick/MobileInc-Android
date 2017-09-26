@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "672362113291",
+    "firebase_url": "https://mobile-inc.firebaseio.com",
+    "project_id": "mobile-inc",
+    "storage_bucket": "mobile-inc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672362113291:android:5ffb144bce8c809b",
+        "android_client_info": {
+          "package_name": "com.chlordane.android.mobileinc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672362113291-dtgk8btlup40g2keip4sh3b8rgdakko6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chlordane.android.mobileinc",
+            "certificate_hash": "e82803bfca815ddd5f7afc1a1b4f53f04678beb6"
+          }
+        },
+        {
+          "client_id": "672362113291-hr6bettkm4957vgtejej4ahmrao8jnl5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfs5AZKUYt1gJJFl61JVvbd1tgL0W_Ris"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672362113291-hr6bettkm4957vgtejej4ahmrao8jnl5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
