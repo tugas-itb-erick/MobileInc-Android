@@ -24,7 +24,7 @@ public class FirstActivity extends AppCompatActivity implements
     private static final String TAG = "FirstActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
     private Button mLoginButton;
 
     @Override
