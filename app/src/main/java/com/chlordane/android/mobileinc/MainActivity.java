@@ -19,7 +19,6 @@ import android.view.View;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -119,7 +118,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_account) {
 
         } else if (id == R.id.nav_about) {
-
+            Intent aboutIntent = new Intent(getApplicationContext(),AboutActivity.class);
+            startActivityForResult(aboutIntent,TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
