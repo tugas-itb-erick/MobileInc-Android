@@ -37,6 +37,10 @@ public class ShopActivity extends AppCompatActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_review_cart) {
             //Toast.makeText(this, "Review Cart Button Pressed", Toast.LENGTH_SHORT).show();
@@ -47,6 +51,5 @@ public class ShopActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }
