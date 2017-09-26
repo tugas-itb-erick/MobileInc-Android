@@ -20,4 +20,7 @@
     <string name="title_back">Back</string>
     <string name="title_see_cart">Review cart</string>
     <string name="title_clear_cart">Clear cart</string>
+    <string name="payment_button">Payment</string>
+    <string name="title_review_cart_activity">My Cart</string>
+    <string name="title_shop_activity">Categories</string>
 </resources>

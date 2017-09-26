@@ -1,16 +1,17 @@
 package com.chlordane.android.mobileinc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class ShopActivity extends AppCompatActivity{
 
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
+    private static final int TEXT_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,9 @@ public class ShopActivity extends AppCompatActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_review_cart) {
-            Toast.makeText(this, "Review Cart Button Pressed", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Review Cart Button Pressed", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(),ReviewCartActivity.class);
+            startActivityForResult(intent, TEXT_REQUEST);
             return true;
         }
 

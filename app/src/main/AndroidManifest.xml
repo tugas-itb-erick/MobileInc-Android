@@ -26,12 +26,21 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ShopActivity"
-            android:label="Shop Activity"
-            android:parentActivityName="com.chlordane.android.mobileinc.MainActivity">
+        <activity
+            android:name=".ShopActivity"
+            android:label="@string/title_shop_activity"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".ReviewCartActivity"
+            android:label="@string/title_review_cart_activity"
+            android:parentActivityName=".ShopActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ShopActivity" />
         </activity>
     </application>
 
