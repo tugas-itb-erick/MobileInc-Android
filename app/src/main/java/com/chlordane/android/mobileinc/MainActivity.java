@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
-    private Button mLoginButton;
 
     private RelativeLayout firstActivity;
     private CoordinatorLayout appBarMainActivity;
@@ -81,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements
         mViewPager = (ViewPager) findViewById(R.id.pager_shop);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new PagerAdapterShop(fragmentManager,6));
-
-        mLoginButton = (Button) findViewById(R.id.loginButton);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
