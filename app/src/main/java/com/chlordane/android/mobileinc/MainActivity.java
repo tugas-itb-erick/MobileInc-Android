@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
 
     private RelativeLayout firstActivity;
     private CoordinatorLayout appBarMainActivity;
@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new PagerAdapterShop(fragmentManager,6));
 
+        // Initialize Activities
+        firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
+        appBarMainActivity = (CoordinatorLayout) findViewById(R.id.activity_app_bar_main);
+        contentMainActivity = (RelativeLayout) findViewById(R.id.activity_content_main);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,18 +94,22 @@ public class MainActivity extends AppCompatActivity implements
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // Initialize Activities
-        firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
-        appBarMainActivity = (CoordinatorLayout) findViewById(R.id.activity_app_bar_main);
-        contentMainActivity = (RelativeLayout) findViewById(R.id.activity_content_main);
+        updateUI(false);
+    }
 
-        // Update UI
-        updateUI(mGoogleApiClient.isConnected());
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -185,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements
             Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
             // Go to next activity
             Intent intent = new Intent(this, SignIn.class);
-            startActivity(intent/*, TEXT_REQUEST*/);
+            startActivityForResult(intent, TEXT_REQUEST);
             updateUI(true);
         } else {
             int errorCode = result.getStatus().getStatusCode();
