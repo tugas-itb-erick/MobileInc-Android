@@ -5,7 +5,7 @@
     <header
         android:fragment="com.chlordane.android.mobileinc.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_costumize_color"
-        android:title="@string/pref_header_costumize_color" />
+        android:title="@string/pref_header_customize_color" />
 
     <header
         android:fragment="com.chlordane.android.mobileinc.SettingsActivity$NotificationPreferenceFragment"
