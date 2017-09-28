@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppThemeMain);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements
         // FCM
         FirebaseMessaging.getInstance().subscribeToTopic("test");
         FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
@@ -321,8 +323,8 @@ public class MainActivity extends AppCompatActivity implements
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         } else {
             firstActivity.setVisibility(View.VISIBLE);
-            contentMainActivity.setVisibility(View.INVISIBLE);
-            appBarMainActivity.setVisibility(View.INVISIBLE);
+            contentMainActivity.setVisibility(View.GONE);
+            appBarMainActivity.setVisibility(View.GONE);
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
