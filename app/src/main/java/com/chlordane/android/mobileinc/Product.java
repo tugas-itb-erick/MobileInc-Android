@@ -8,11 +8,13 @@ public class Product {
     private int imageResource;
     private String productName;
     private String description;
+    private String url;
 
     public Product(String productName, String description, int imageResource) {
         this.productName = productName;
         this.description = description;
         this.imageResource = imageResource;
+        this.url = url;
     }
 
     public String getProductName() {
@@ -25,5 +27,9 @@ public class Product {
 
     public int getImageResource(){
         return imageResource;
+    }
+
+    public String getProductUrl(){
+        return url;
     }
 }

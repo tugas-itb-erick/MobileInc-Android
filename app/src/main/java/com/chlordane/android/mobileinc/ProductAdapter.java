@@ -1,6 +1,8 @@
 package com.chlordane.android.mobileinc;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -59,10 +61,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             mDescription = (TextView) itemView.findViewById(R.id.productDescription);
             mProductImage = (ImageView) itemView.findViewById(R.id.mobileImage);
             mProductImage.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View v) {
-                    //intent untuk buka web
+                    String data;
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    if(mProductName.getText().equals("Mi 5")){
+                        data = "http://www.mi.com/en/mi5/";
+                    }else if(mProductName.getText().equals("Mi Max")){
+                        data = "http://www.mi.com/en/mimax/";
+                    }else if(mProductName.getText().equals("Redmi 3s")){
+                        data = "http://www.mi.com/en/redmi3s/";
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                        data = "http://www.samsung.com/us/mobile/phones/galaxy-note/galaxy-note8-64gb--at-t--orchid-gray-sm-n950uzvaatt/";
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                        data = "http://www.samsung.com/us/mobile/phones/galaxy-note/samsung-galaxy-note5-64gb-at-t-black-sapphire-sm-n920azkeatt/";
+                    }else {
+                        data = "http://www.samsung.com/us/mobile/phones/galaxy-s/galaxy-s8-plus-64gb--unlocked--sm-g955uzkaxaa/";
+                    }
+                    intent.setData(Uri.parse(data));
+                    if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                        mContext.startActivity(intent);
+                    }
                 }
             });
         }

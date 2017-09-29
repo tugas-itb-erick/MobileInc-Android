@@ -40,6 +40,26 @@
                 android:layout_toRightOf="@id/mobileImage"
                 android:padding="8dp"
                 android:textColor="#a4a4a4" />
+
+            <Button android:id="@+id/plusOne"
+                android:layout_height="35dp"
+                android:layout_width="35dp"
+                android:text="+"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true" />
+
+            <Button android:id="@+id/minusOne"
+                android:layout_height="35dp"
+                android:layout_width="35dp"
+                android:text="-"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_above="@id/minusOne"
+                android:layout_alignParentRight="true"/>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

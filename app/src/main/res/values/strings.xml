@@ -124,4 +124,6 @@
         <item>@drawable/samsung_galaxy_note5att</item>
         <item>@drawable/samsung_galaxy_s8plus</item>
     </array>
+
+
 </resources>
