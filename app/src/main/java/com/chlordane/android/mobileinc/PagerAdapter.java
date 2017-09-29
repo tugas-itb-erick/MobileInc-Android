@@ -20,9 +20,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new TabFragment1();
+                return new TabFragmentShopAll();
             case 1:
-                return new TabFragment2();
+                return new TabFragmentShopSamsung();
+            case 2:
+                return new TabFragmentShopXiaomi();
             default:
                 return null;
         }

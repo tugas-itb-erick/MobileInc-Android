@@ -1,14 +1,13 @@
 package com.chlordane.android.mobileinc;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -28,6 +27,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public ProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_mobile_item, parent, false));
     }
 
@@ -36,7 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Product currentProduct = mProductData.get(position);
         //Populate the textviews with data
         holder.bindTo(currentProduct);
-        Glide.with(mContext).load(currentProduct.getImageResource()).into(holder.mProductImage);
+        //Glide.with(mContext).load(currentProduct.getImageResource()).into(holder.mProductImage);
     }
 
     @Override
@@ -45,12 +45,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private CardView mCardView;
         private TextView mProductName;
         private TextView mDescription;
         private ImageView mProductImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mCardView = (CardView) itemView.findViewById(R.id.productCardView);
             mProductName = (TextView) itemView.findViewById(R.id.productName);
             mDescription = (TextView) itemView.findViewById(R.id.productDescription);
             mProductImage = (ImageView) itemView.findViewById(R.id.mobileImage);

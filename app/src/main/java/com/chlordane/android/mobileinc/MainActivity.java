@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -33,7 +34,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements
     private RelativeLayout contentMainActivity;
 
     private DrawerLayout mDrawer;
+    private String playerName;
+    private TextView mPlayerNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +92,30 @@ public class MainActivity extends AppCompatActivity implements
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        mPlayerNameTextView = (TextView) findViewById(R.id.playerName);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager_shop);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new PagerAdapterShop(fragmentManager, 6));
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("All"));
+        tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
+        tabLayout.addTab(tabLayout.newTab().setText("Samsung"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        final android.support.v4.view.PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         // Initialize Activities
         firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
@@ -120,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements
         FirebaseMessaging.getInstance().subscribeToTopic("test");
         FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
+
     }
 
     @Override
@@ -267,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
+            playerName = acct.getDisplayName();
             firebaseAuthWithGoogle(acct);
         } else {
             int errorCode = result.getStatus().getStatusCode();

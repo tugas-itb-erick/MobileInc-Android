@@ -5,7 +5,7 @@ package com.chlordane.android.mobileinc;
  */
 
 public class Product {
-    private final int imageResource;
+    private int imageResource;
     private String productName;
     private String description;
 
