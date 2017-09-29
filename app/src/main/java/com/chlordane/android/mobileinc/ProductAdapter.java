@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -36,7 +38,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Product currentProduct = mProductData.get(position);
         //Populate the textviews with data
         holder.bindTo(currentProduct);
-        //Glide.with(mContext).load(currentProduct.getImageResource()).into(holder.mProductImage);
+        Picasso.with(mContext).load(currentProduct.getImageResource()).into(holder.mProductImage);
     }
 
     @Override

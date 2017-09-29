@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
-        tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
         tabLayout.addTab(tabLayout.newTab().setText("Samsung"));
+        tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final android.support.v4.view.PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());

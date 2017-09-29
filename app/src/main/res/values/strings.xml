@@ -97,4 +97,31 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_header_customize_color">Customize theme color</string>
+
+    <string-array name="product_names">
+        <item>Mi 5</item>
+        <item>Mi Max</item>
+        <item>Redmi 3s</item>
+        <item>Galaxy Note8 64GB (AT&amp;T)</item>
+        <item>Galaxy Note5 64GB (AT&amp;T)</item>
+        <item>Galaxy S8+ 64GB (Unlocked)</item>
+    </string-array>
+
+    <string-array name="product_descriptions">
+        <item>Price: $ 456</item>
+        <item>Price: $ 402</item>
+        <item>Price: $ 134</item>
+        <item>Price: $ 950</item>
+        <item>Price: $ 840</item>
+        <item>Price: $ 825</item>
+    </string-array>
+
+    <array name="product_images">
+        <item>@drawable/xiaomi_mi_5</item>
+        <item>@drawable/xiaomi_mi_max</item>
+        <item>@drawable/xiaomi_redmi_3s_note</item>
+        <item>@drawable/samsung_galaxy_note8</item>
+        <item>@drawable/samsung_galaxy_note5att</item>
+        <item>@drawable/samsung_galaxy_s8plus</item>
+    </array>
 </resources>

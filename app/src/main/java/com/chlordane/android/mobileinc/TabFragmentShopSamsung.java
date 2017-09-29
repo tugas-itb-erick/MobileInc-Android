@@ -1,6 +1,7 @@
 package com.chlordane.android.mobileinc;
 
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class TabFragmentShopSamsung extends Fragment {
-    private ArrayList<Product> ProductList;
+    private ArrayList<Product> productList;
+    private ProductAdapter mAdapter;
 
     public TabFragmentShopSamsung() {
         // Required empty public constructor
@@ -25,7 +27,6 @@ public class TabFragmentShopSamsung extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        initData();
     }
 
     @Override
@@ -35,8 +36,11 @@ public class TabFragmentShopSamsung extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tab_fragment_shop_samsung, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewSamsung);
         recyclerView.setHasFixedSize(true);
-        ProductAdapter adapter = new ProductAdapter(getContext(),ProductList);
-        recyclerView.setAdapter(adapter);
+
+        productList = new ArrayList<Product>();
+        mAdapter = new ProductAdapter(getContext(),productList);
+        recyclerView.setAdapter(mAdapter);
+        initData();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager((getActivity()));
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -45,16 +49,17 @@ public class TabFragmentShopSamsung extends Fragment {
     }
 
     public void initData(){
-        ProductList = new ArrayList<Product>(3);
+        String[] productNameList = getResources().getStringArray(R.array.product_names);
+        String[] productDescriptionList = getResources().getStringArray(R.array.product_descriptions);
 
-        Product prod1 = new Product("Samsung1","desc lorem ipsum", 4);
-        Product prod2 = new Product("Samsung2","desc lorem ipsum", 5);
-        Product prod3 = new Product("Samsung3","desc lorem ipsum", 6);
+        productList.clear();
+        TypedArray productsImageResources = getResources().obtainTypedArray(R.array.product_images);
 
-        ProductList.add(prod1);
-        ProductList.add(prod2);
-        ProductList.add(prod3);
+        for(int i=3;i<6;i++){
+            productList.add(new Product(productNameList[i],productDescriptionList[i],productsImageResources.getResourceId(i,0)));
+        }
 
+        mAdapter.notifyDataSetChanged();
     }
 
 }

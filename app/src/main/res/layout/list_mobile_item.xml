@@ -16,13 +16,13 @@
 
             <ImageView
                 android:id="@+id/mobileImage"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true" />
 
             <TextView
                 android:id="@+id/productName"
-                style="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/mobileImage"
