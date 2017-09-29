@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent shopIntent = new Intent (getApplicationContext(), ReviewCartActivity.class);
-                startActivityForResult(shopIntent,TEXT_REQUEST);
+                Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
+                startActivityForResult(shopIntent, TEXT_REQUEST);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
             }
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mViewPager = (ViewPager) findViewById(R.id.pager_shop);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new PagerAdapterShop(fragmentManager,6));
+        mViewPager.setAdapter(new PagerAdapterShop(fragmentManager, 6));
 
         // Initialize Activities
         firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent settingIntent = new Intent(getApplicationContext(),SettingsActivity.class);
-            startActivityForResult(settingIntent,TEXT_REQUEST);
+            Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivityForResult(settingIntent, TEXT_REQUEST);
             return true;
         }
 
@@ -214,11 +214,14 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            Intent shopIntent = new Intent (getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(shopIntent,TEXT_REQUEST);
+            Intent shopIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivityForResult(shopIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_about) {
-            Intent aboutIntent = new Intent(getApplicationContext(),AboutActivity.class);
-            startActivityForResult(aboutIntent,TEXT_REQUEST);
+            Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
+            startActivityForResult(aboutIntent, TEXT_REQUEST);
+        } else if (id == R.id.nav_qr_scan) {
+            Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
+            startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Google sign out
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>(){
+                new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
                         updateUI(null);

@@ -3,6 +3,8 @@
     package="com.chlordane.android.mobileinc">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +15,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_main"
-            android:theme="@style/splashScreenTheme" >
+            android:screenOrientation="portrait"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignIn" />
-
         <activity
             android:name=".ReviewCartActivity"
             android:label="@string/title_review_cart_activity"
@@ -48,20 +49,29 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.chlordane.android.mobileinc.MainActivity" />
         </activity>
+        <activity
+            android:name=".QRScanActivity"
+            android:label="Namain donk"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chlordane.android.mobileinc.MainActivity" />
+        </activity>
 
-        <service
-            android:name=".FirebaseMessagingService">
+        <service android:name=".FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".FirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".FirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
 
     </application>
 
