@@ -1,5 +1,6 @@
 package com.chlordane.android.mobileinc;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,8 +28,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -42,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mAuth;
+    private ProgressDialog mProgressDialog;
 
     private RelativeLayout firstActivity;
     private CoordinatorLayout appBarMainActivity;
@@ -51,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppThemeMain);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent shopIntent = new Intent (getApplicationContext(), ReviewCartActivity.class);
-                startActivityForResult(shopIntent,TEXT_REQUEST);
+                Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
+                startActivityForResult(shopIntent, TEXT_REQUEST);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
             }
@@ -78,11 +93,17 @@ public class MainActivity extends AppCompatActivity implements
 
         mViewPager = (ViewPager) findViewById(R.id.pager_shop);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new PagerAdapterShop(fragmentManager,6));
+        mViewPager.setAdapter(new PagerAdapterShop(fragmentManager, 6));
+
+        // Initialize Activities
+        firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
+        appBarMainActivity = (CoordinatorLayout) findViewById(R.id.activity_app_bar_main);
+        contentMainActivity = (RelativeLayout) findViewById(R.id.activity_content_main);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -93,14 +114,71 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // Initialize Activities
-        firstActivity = (RelativeLayout) findViewById(R.id.activity_first);
-        appBarMainActivity = (CoordinatorLayout) findViewById(R.id.activity_app_bar_main);
-        contentMainActivity = (RelativeLayout) findViewById(R.id.activity_content_main);
+        mAuth = FirebaseAuth.getInstance();
 
-        // Update UI
-        updateUI(mGoogleApiClient.isConnected());
+        // FCM
+        FirebaseMessaging.getInstance().subscribeToTopic("test");
+        FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            showProgressDialog();
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    hideProgressDialog();
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideProgressDialog();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
     }
 
     @Override
@@ -121,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent settingIntent = new Intent(getApplicationContext(),SettingsActivity.class);
-            startActivityForResult(settingIntent,TEXT_REQUEST);
+            Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivityForResult(settingIntent, TEXT_REQUEST);
             return true;
         }
 
@@ -136,11 +214,14 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            Intent shopIntent = new Intent (getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(shopIntent,TEXT_REQUEST);
+            Intent shopIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivityForResult(shopIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_about) {
-            Intent aboutIntent = new Intent(getApplicationContext(),AboutActivity.class);
-            startActivityForResult(aboutIntent,TEXT_REQUEST);
+            Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
+            startActivityForResult(aboutIntent, TEXT_REQUEST);
+        } else if (id == R.id.nav_qr_scan) {
+            Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
+            startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
@@ -149,21 +230,24 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    private void signOut() {
-        // Google sign out
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>(){
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        updateUI(false);
-                    }
-                }
-        );
-    }
-
     public void login(View view) {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google sign out
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        updateUI(null);
+                    }
+                }
+        );
     }
 
     @Override
@@ -183,10 +267,7 @@ public class MainActivity extends AppCompatActivity implements
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
-            // Go to next activity
-            Intent intent = new Intent(this, SignIn.class);
-            startActivity(intent/*, TEXT_REQUEST*/);
-            updateUI(true);
+            firebaseAuthWithGoogle(acct);
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
@@ -194,11 +275,39 @@ public class MainActivity extends AppCompatActivity implements
             if (errorCode == GoogleSignInStatusCodes.NETWORK_ERROR) {
                 // Handle network error
                 Toast.makeText(this, "Network Error", Toast.LENGTH_SHORT).show();
-            } else {
-                // Other error codes
-                Toast.makeText(this, "Error Code: " + Integer.toString(errorCode), Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        // [START_EXCLUDE silent]
+        showProgressDialog();
+        // [END_EXCLUDE]
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // [START_EXCLUDE]
+                        hideProgressDialog();
+                        // [END_EXCLUDE]
+                    }
+                });
     }
 
     @Override
@@ -206,17 +315,19 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            firstActivity.setVisibility(View.INVISIBLE);
+    private void updateUI(FirebaseUser user) {
+        hideProgressDialog();
+
+        if (user != null) {
+            firstActivity.setVisibility(View.GONE);
             contentMainActivity.setVisibility(View.VISIBLE);
             appBarMainActivity.setVisibility(View.VISIBLE);
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         } else {
             firstActivity.setVisibility(View.VISIBLE);
-            contentMainActivity.setVisibility(View.INVISIBLE);
-            appBarMainActivity.setVisibility(View.INVISIBLE);
+            contentMainActivity.setVisibility(View.GONE);
+            appBarMainActivity.setVisibility(View.GONE);
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }

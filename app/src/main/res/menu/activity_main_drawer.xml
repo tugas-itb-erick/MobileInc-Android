@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_menu_about"
             android:title="About" />
         <item
+            android:id="@+id/nav_qr_scan"
+            android:icon="@drawable/ic_menu_sign_out"
+            android:title="Promo" />
+        <item
             android:id="@+id/nav_sign_out"
             android:icon="@drawable/ic_menu_sign_out"
             android:title="Sign out" />
