@@ -76,8 +76,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         private SharedPreferences mPreferences;
         private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
-        private int mCount = 0;
-        private final String COUNT_KEY = "";
         private final SharedPreferences.Editor editor;
 
         public ViewHolder(View itemView) {
@@ -123,7 +121,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     //String stringValue = mItemCount.getText().toString();
-                    int currentValue;
+                    int currentValue = 0;
 
                     if(mProductName.getText().equals("Mi 5")){
                         currentValue = mPreferences.getInt(MI5COUNT_KEY,0)+1;
@@ -153,7 +151,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     //String stringValue = mItemCount.getText().toString();
-                    int currentValue;
+                    int currentValue = 0;
 
                     if(mProductName.getText().equals("Mi 5")){
                         currentValue = (mPreferences.getInt(MI5COUNT_KEY,0)==0)? 0:mPreferences.getInt(MI5COUNT_KEY,0)-1;

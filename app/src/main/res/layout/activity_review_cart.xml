@@ -6,13 +6,237 @@
     android:layout_height="match_parent"
     tools:context="com.chlordane.android.mobileinc.ReviewCartActivity">
 
+    <TextView
+        android:id="@+id/productName1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName1"
+        android:text="amount: "
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount1"
+        android:layout_toEndOf="@id/amount1"
+        android:layout_below="@id/productName1"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/productName2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount1"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName2"
+        android:text="amount: "
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount2"
+        android:layout_toEndOf="@id/amount2"
+        android:layout_below="@id/productName2"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/productName3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount2"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName3"
+        android:text="amount: "
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount3"
+        android:layout_toEndOf="@id/amount3"
+        android:layout_below="@id/productName3"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/productName4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount3"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName4"
+        android:text="amount: "
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount4"
+        android:layout_toEndOf="@id/amount4"
+        android:layout_below="@id/productName4"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/productName5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount4"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName5"
+        android:text="amount: "
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount5"
+        android:layout_toEndOf="@id/amount5"
+        android:layout_below="@id/productName5"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/productName6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="prod1"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount5"
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/amount6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName6"
+        android:text="amount: "
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPrice6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/amount6"
+        android:layout_toEndOf="@id/amount6"
+        android:layout_below="@id/productName6"
+        android:text="xx"/>
+
+    <TextView
+        android:id="@+id/discountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Discount"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/amount6"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/discountLabel"
+        android:layout_toEndOf="@id/discountLabel"
+        android:layout_below="@id/amount6"
+        android:text="pppp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/totalPriceAllLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_below="@id/discountLabel"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPriceAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/totalPriceAllLabel"
+        android:layout_toEndOf="@id/totalPriceAllLabel"
+        android:layout_below="@id/discountLabel"
+        android:text="ttttt"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/totalPriceAllLabel"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:hint="Insert you credit card number"/>
+
     <LinearLayout
         android:id="@+id/footer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
+        android:background="@color/colorPrimary"
         style="@android:style/ButtonBar">
 
         <Button android:id="@+id/PaymentButton"
@@ -22,6 +246,7 @@
             android:background="@drawable/blue_default_button"
             android:text="@string/payment_button"
             android:textColor="#FFFFFF"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"/>
     </LinearLayout>
 </RelativeLayout>

@@ -1,7 +1,9 @@
 package com.chlordane.android.mobileinc;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -79,12 +81,26 @@ public class MainActivity extends AppCompatActivity implements
     private String playerName;
     private TextView mPlayerNameTextView;
 
+    private SharedPreferences mPreferences;
+    private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
+    private SharedPreferences.Editor editor;
+
+    private final String MI5COUNT_KEY = "mi5_count";
+    private final String MIMAXCOUNT_KEY = "mimax_count";
+    private final String REDMICOUNT_KEY = "redmi_count";
+    private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
+    private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
+    private final String GALAXYS8COUNT_KEY = "galaxys8_count";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeMain);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPreferences = getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
+        editor = mPreferences.edit();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -254,6 +270,18 @@ public class MainActivity extends AppCompatActivity implements
             Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
             startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
+            editor.putInt(MI5COUNT_KEY,0);
+            editor.apply();
+            editor.putInt(MIMAXCOUNT_KEY,0);
+            editor.apply();
+            editor.putInt(REDMICOUNT_KEY,0);
+            editor.apply();
+            editor.putInt(GALAXYNOTE8COUNT_KEY,0);
+            editor.apply();
+            editor.putInt(GALAXYNOTE5COUNT_KEY,0);
+            editor.apply();
+            editor.putInt(GALAXYS8COUNT_KEY,0);
+            editor.apply();
             signOut();
         }
 
