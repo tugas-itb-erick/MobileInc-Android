@@ -2,6 +2,7 @@ package com.chlordane.android.mobileinc;
 
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -43,6 +45,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static final String THEME_PREFERENCES = "SettingsPrefs" ;
     public static final String ThemeKey = "Theme";
+
+    public static void updateTheme(Context context){
+        Log.d("Settings", "Invoked");
+        String val = PreferenceManager.getDefaultSharedPreferences(context).getString("theme_list", "1");
+        int theme = Integer.parseInt(val);
+        switch (theme) {
+            case 1: context.setTheme(R.style.AppTheme); break;
+            case 2: context.setTheme(R.style.dark); break;
+            case 3: context.setTheme(R.style.dark); break;
+            case 4: context.setTheme(R.style.dark); break;
+            default: context.setTheme(R.style.dark); break;
+        }
+    }
+
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
