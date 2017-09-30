@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,6 +54,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private TextView mProductName;
         private TextView mDescription;
         private ImageView mProductImage;
+        private Button mPlusButton;
+        private Button mMinusButton;
+        private TextView mItemCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -60,6 +64,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             mProductName = (TextView) itemView.findViewById(R.id.productName);
             mDescription = (TextView) itemView.findViewById(R.id.productDescription);
             mProductImage = (ImageView) itemView.findViewById(R.id.mobileImage);
+            mPlusButton = (Button) itemView.findViewById(R.id.plusOne);
+            mMinusButton = (Button) itemView.findViewById(R.id.minusOne);
+            mItemCount = (TextView) itemView.findViewById(R.id.itemCount);
+
             mProductImage.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
@@ -83,6 +91,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     if (intent.resolveActivity(mContext.getPackageManager()) != null) {
                         mContext.startActivity(intent);
                     }
+                }
+            });
+
+            mPlusButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    String stringValue = mItemCount.getText().toString();
+                    int currentValue = Integer.parseInt(stringValue) + 1;
+                    mItemCount.setText(Integer.toString(currentValue));
+                }
+            });
+
+            mMinusButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    String stringValue = mItemCount.getText().toString();
+                    int currentValue = (Integer.parseInt(stringValue) > 0)? Integer.parseInt(stringValue)-1:0;
+                    mItemCount.setText(Integer.toString(currentValue));
                 }
             });
         }

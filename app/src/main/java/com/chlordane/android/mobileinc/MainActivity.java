@@ -47,7 +47,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String EXTRA_MESSAGE = "com.chlordane.android.mobileinc.extra.MESSAGE";
     public static final int TEXT_REQUEST = 1;
     private ViewPager mViewPager;
 
@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private NavigationView navigationView;
     private DrawerLayout mDrawer;
+
+    private String playerName;
     private TextView mPlayerNameTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,7 +297,6 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
-
             String playerName = acct.getDisplayName();
             View v = navigationView.getHeaderView(0);
             TextView nameTextView = (TextView) v.findViewById(R.id.playerName);
