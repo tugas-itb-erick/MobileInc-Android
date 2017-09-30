@@ -71,9 +71,12 @@ public class MainActivity extends AppCompatActivity implements
     private CoordinatorLayout appBarMainActivity;
     private RelativeLayout contentMainActivity;
 
+    private NavigationView navigationView;
     private DrawerLayout mDrawer;
+
     private String playerName;
-    //private TextView mPlayerNameTextView;
+    private TextView mPlayerNameTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +102,9 @@ public class MainActivity extends AppCompatActivity implements
                 this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
-        //mPlayerNameTextView = (TextView) findViewById(R.id.playerName);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View hView =  navigationView.getHeaderView(0);
-        TextView mPlayerNameTextView = (TextView)hView.findViewById(R.id.playerName);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        mPlayerNameTextView.setText(playerName);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
@@ -296,12 +295,13 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
-            playerName = acct.getDisplayName();
-            //mPlayerNameTextView.setText("Rol");
+            String playerName = acct.getDisplayName();
+            View v = navigationView.getHeaderView(0);
+            TextView nameTextView = (TextView) v.findViewById(R.id.playerName);
+            nameTextView.setText(playerName);
 
-            sendNameAndTokenToServer(playerName);
             firebaseAuthWithGoogle(acct);
+            sendNameAndTokenToServer(playerName);
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
