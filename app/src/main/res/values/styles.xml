@@ -17,6 +17,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="dark" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#202020</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#303030</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:colorBackground">#404040</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

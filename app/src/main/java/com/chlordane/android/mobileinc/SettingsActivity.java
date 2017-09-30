@@ -43,7 +43,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static final String THEME_PREFERENCES = "SettingsPrefs" ;
     public static final String ThemeKey = "Theme";
-    SharedPreferences sharedpreferences;
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
@@ -61,8 +60,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
-
-                
 
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
