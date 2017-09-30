@@ -2,9 +2,11 @@ package com.chlordane.android.mobileinc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private ArrayList<Product> mProductData;
     private Context mContext;
+
+    private int mCountMi5 = 0;
+    private int mCountMiMax = 0;
+    private int mCountRedmi = 0;
+    private int mGalaxyNote8 = 0;
+    private int mGalaxyS8 = 0;
+    private int mGalaxyNote5 = 0;
+
+    private final String MI5COUNT_KEY = "mi5_count";
+    private final String MIMAXCOUNT_KEY = "mimax_count";
+    private final String REDMICOUNT_KEY = "redmi_count";
+    private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
+    private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
+    private final String GALAXYS8COUNT_KEY = "galaxys8_count";
 
     ProductAdapter(Context context, ArrayList<Product> productData){
         mContext = context;
@@ -58,6 +74,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         private Button mMinusButton;
         private TextView mItemCount;
 
+        private SharedPreferences mPreferences;
+        private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
+        private int mCount = 0;
+        private final String COUNT_KEY = "";
+        private final SharedPreferences.Editor editor;
+
         public ViewHolder(View itemView) {
             super(itemView);
             mCardView = (CardView) itemView.findViewById(R.id.productCardView);
@@ -67,6 +89,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             mPlusButton = (Button) itemView.findViewById(R.id.plusOne);
             mMinusButton = (Button) itemView.findViewById(R.id.minusOne);
             mItemCount = (TextView) itemView.findViewById(R.id.itemCount);
+            mPreferences = mContext.getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
+            editor = mPreferences.edit();
+            Log.d("Shared Pref. Test",Integer.toString(mPreferences.getInt(MI5COUNT_KEY,0)));
 
             mProductImage.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -97,8 +122,29 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             mPlusButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    String stringValue = mItemCount.getText().toString();
-                    int currentValue = Integer.parseInt(stringValue) + 1;
+                    //String stringValue = mItemCount.getText().toString();
+                    int currentValue;
+
+                    if(mProductName.getText().equals("Mi 5")){
+                        currentValue = mPreferences.getInt(MI5COUNT_KEY,0)+1;
+                        editor.putInt(MI5COUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Mi Max")){
+                        currentValue = mPreferences.getInt(MIMAXCOUNT_KEY,0)+1;
+                        editor.putInt(MIMAXCOUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Redmi 3s")){
+                        currentValue = mPreferences.getInt(REDMICOUNT_KEY,0)+1;
+                        editor.putInt(REDMICOUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                        currentValue = mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)+1;
+                        editor.putInt(GALAXYNOTE8COUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                        currentValue = mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)+1;
+                        editor.putInt(GALAXYNOTE5COUNT_KEY,currentValue);
+                    }else {
+                        currentValue = mPreferences.getInt(GALAXYS8COUNT_KEY,0)+1;
+                        editor.putInt(GALAXYS8COUNT_KEY,currentValue);
+                    }
+                    editor.apply();
                     mItemCount.setText(Integer.toString(currentValue));
                 }
             });
@@ -106,8 +152,29 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             mMinusButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    String stringValue = mItemCount.getText().toString();
-                    int currentValue = (Integer.parseInt(stringValue) > 0)? Integer.parseInt(stringValue)-1:0;
+                    //String stringValue = mItemCount.getText().toString();
+                    int currentValue;
+
+                    if(mProductName.getText().equals("Mi 5")){
+                        currentValue = (mPreferences.getInt(MI5COUNT_KEY,0)==0)? 0:mPreferences.getInt(MI5COUNT_KEY,0)-1;
+                        editor.putInt(MI5COUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Mi Max")){
+                        currentValue = (mPreferences.getInt(MIMAXCOUNT_KEY,0)==0)? 0:mPreferences.getInt(MIMAXCOUNT_KEY,0)-1;
+                        editor.putInt(MIMAXCOUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Redmi 3s")){
+                        currentValue = (mPreferences.getInt(REDMICOUNT_KEY,0)==0)? 0:mPreferences.getInt(REDMICOUNT_KEY,0)-1;
+                        editor.putInt(REDMICOUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                        currentValue = (mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)==0)? 0:mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)-1;
+                        editor.putInt(GALAXYNOTE8COUNT_KEY,currentValue);
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                        currentValue = (mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)==0)? 0:mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)-1;
+                        editor.putInt(GALAXYNOTE5COUNT_KEY,currentValue);
+                    }else {
+                        currentValue = (mPreferences.getInt(GALAXYS8COUNT_KEY,0)==0)? 0:mPreferences.getInt(GALAXYS8COUNT_KEY,0)-1;
+                        editor.putInt(GALAXYS8COUNT_KEY,currentValue);
+                    }
+                    editor.apply();
                     mItemCount.setText(Integer.toString(currentValue));
                 }
             });
@@ -116,6 +183,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public void bindTo(Product currentProduct) {
             mProductName.setText(currentProduct.getProductName());
             mDescription.setText(currentProduct.getProductDescription());
+            if(mProductName.getText().equals("Mi 5")){
+                mItemCount.setText(Integer.toString(mPreferences.getInt(MI5COUNT_KEY,0)));
+            }else if(mProductName.getText().equals("Mi Max")){
+                mItemCount.setText(Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY,0)));
+            }else if(mProductName.getText().equals("Redmi 3s")){
+                mItemCount.setText(Integer.toString(mPreferences.getInt(REDMICOUNT_KEY,0)));
+            }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)));
+            }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)));
+            }else {
+                mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYS8COUNT_KEY,0)));
+            }
         }
     }
 }
