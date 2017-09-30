@@ -1,10 +1,14 @@
 package com.chlordane.android.mobileinc;
 
+import android.*;
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -13,6 +17,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -42,7 +47,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -67,11 +75,14 @@ public class MainActivity extends AppCompatActivity implements
     private static final String ACCOUNT_SUCCESS_TAG = "FirebaseAccountAdd";
     private static final String ACCOUNT_ERROR_TAG = "FirebaseAccountError";
     private static final int RC_SIGN_IN = 9001;
+    private static final int RC_LOCATION_PERMISSION_ID = 1001;
 
+    // Authentication
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private ProgressDialog mProgressDialog;
 
+    // Layouts
     private RelativeLayout firstActivity;
     private CoordinatorLayout appBarMainActivity;
     private RelativeLayout contentMainActivity;
@@ -92,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
+
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +153,11 @@ public class MainActivity extends AppCompatActivity implements
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
@@ -279,18 +294,6 @@ public class MainActivity extends AppCompatActivity implements
             Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
             startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
-            editor.putInt(MI5COUNT_KEY,0);
-            editor.apply();
-            editor.putInt(MIMAXCOUNT_KEY,0);
-            editor.apply();
-            editor.putInt(REDMICOUNT_KEY,0);
-            editor.apply();
-            editor.putInt(GALAXYNOTE8COUNT_KEY,0);
-            editor.apply();
-            editor.putInt(GALAXYNOTE5COUNT_KEY,0);
-            editor.apply();
-            editor.putInt(GALAXYS8COUNT_KEY,0);
-            editor.apply();
             signOut();
         }
 
@@ -304,6 +307,20 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void signOut() {
+        // Clear Sharedpref vars
+        editor.putInt(MI5COUNT_KEY,0);
+        editor.apply();
+        editor.putInt(MIMAXCOUNT_KEY,0);
+        editor.apply();
+        editor.putInt(REDMICOUNT_KEY,0);
+        editor.apply();
+        editor.putInt(GALAXYNOTE8COUNT_KEY,0);
+        editor.apply();
+        editor.putInt(GALAXYNOTE5COUNT_KEY,0);
+        editor.apply();
+        editor.putInt(GALAXYS8COUNT_KEY,0);
+        editor.apply();
+
         // Firebase sign out
         mAuth.signOut();
 
@@ -341,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements
 
             firebaseAuthWithGoogle(acct);
             sendNameAndTokenToServer(playerName);
+            startService(new Intent(this, LocationService.class));
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
