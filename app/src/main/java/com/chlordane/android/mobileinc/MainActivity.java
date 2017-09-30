@@ -2,6 +2,7 @@ package com.chlordane.android.mobileinc;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -357,12 +358,14 @@ public class MainActivity extends AppCompatActivity implements
             appBarMainActivity.setVisibility(View.VISIBLE);
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         } else {
             firstActivity.setVisibility(View.VISIBLE);
             contentMainActivity.setVisibility(View.GONE);
             appBarMainActivity.setVisibility(View.GONE);
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 
