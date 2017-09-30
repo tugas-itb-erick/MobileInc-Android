@@ -22,6 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -42,6 +48,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -51,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements
     private ViewPager mViewPager;
 
     private static final String TAG = "MainActivity";
+    private static final String ACCOUNT_SUCCESS_TAG = "FirebaseAccountAdd";
+    private static final String ACCOUNT_ERROR_TAG = "FirebaseAccountError";
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
@@ -137,12 +148,6 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         mAuth = FirebaseAuth.getInstance();
-
-        // FCM
-        FirebaseMessaging.getInstance().subscribeToTopic("test");
-        FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Token: " + FirebaseInstanceId.getInstance().getToken());
-
     }
 
     @Override
@@ -291,6 +296,8 @@ public class MainActivity extends AppCompatActivity implements
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
             playerName = acct.getDisplayName();
+
+            sendNameAndTokenToServer(playerName);
             firebaseAuthWithGoogle(acct);
         } else {
             int errorCode = result.getStatus().getStatusCode();
@@ -355,6 +362,37 @@ public class MainActivity extends AppCompatActivity implements
 
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
+    }
+
+    private void sendNameAndTokenToServer(final String name) {
+        final String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Name: " + name + ", Token: " + token);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = "http://mobileinc.herokuapp.com/api/manage/user";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(ACCOUNT_SUCCESS_TAG, "Success, Server Response : " + response);
+            }
+        },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(ACCOUNT_ERROR_TAG, "Error : " + error.toString());
+            }
+        })
+        {
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("name", name);
+                params.put("firebase_key", token);
+
+                return params;
+            }
+        };
+
+        requestQueue.add(postRequest);
     }
 
     @Override
