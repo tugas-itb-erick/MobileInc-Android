@@ -98,8 +98,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     String stringValue = mItemCount.getText().toString();
-                    int currentValue = Integer.parseInt(stringValue);
-                    currentValue++;
+                    int currentValue = Integer.parseInt(stringValue) + 1;
                     mItemCount.setText(Integer.toString(currentValue));
                 }
             });
@@ -108,8 +107,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     String stringValue = mItemCount.getText().toString();
-                    int currentValue = Integer.parseInt(stringValue);
-                    currentValue--;
+                    int currentValue = (Integer.parseInt(stringValue) > 0)? Integer.parseInt(stringValue)-1:0;
                     mItemCount.setText(Integer.toString(currentValue));
                 }
             });

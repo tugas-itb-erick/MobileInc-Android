@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String EXTRA_MESSAGE = "com.chlordane.android.mobileinc.extra.MESSAGE";
     public static final int TEXT_REQUEST = 1;
     private ViewPager mViewPager;
 
