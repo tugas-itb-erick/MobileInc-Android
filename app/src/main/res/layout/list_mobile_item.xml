@@ -56,9 +56,11 @@
                 android:layout_alignParentBottom="true"/>
 
             <TextView
+                android:id="@+id/itemCount"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_above="@id/minusOne"
+                android:text="0"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
 
