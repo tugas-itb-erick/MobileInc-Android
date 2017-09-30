@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements
     private CoordinatorLayout appBarMainActivity;
     private RelativeLayout contentMainActivity;
 
+    private NavigationView navigationView;
     private DrawerLayout mDrawer;
-    private String playerName;
     private TextView mPlayerNameTextView;
 
     @Override
@@ -101,9 +101,8 @@ public class MainActivity extends AppCompatActivity implements
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mPlayerNameTextView = (TextView) findViewById(R.id.playerName);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
@@ -294,11 +293,14 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(this, acct.getDisplayName() + " " + acct.getEmail(), Toast.LENGTH_SHORT).show();
-            playerName = acct.getDisplayName();
 
-            sendNameAndTokenToServer(playerName);
+            String playerName = acct.getDisplayName();
+            View v = navigationView.getHeaderView(0);
+            TextView nameTextView = (TextView) v.findViewById(R.id.playerName);
+            nameTextView.setText(playerName);
+
             firebaseAuthWithGoogle(acct);
+            sendNameAndTokenToServer(playerName);
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
