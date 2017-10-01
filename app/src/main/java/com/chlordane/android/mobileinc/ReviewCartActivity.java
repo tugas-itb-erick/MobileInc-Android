@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class ReviewCartActivity extends AppCompatActivity {
 
     private ArrayList<Integer> amountOfItem;
+    private float discountValue;
 
     private TextView[] productName;
     private TextView[] amountLabel;
@@ -103,11 +104,16 @@ public class ReviewCartActivity extends AppCompatActivity {
         amountOfItem.add(mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(GALAXYS8COUNT_KEY,0));
+
+        discountValue = mPreferences.getFloat(DISCOUNT_KEY,new Float(0.1));
+
     }
 
     public void printCartData(){
         String[] productNameList = getResources().getStringArray(R.array.product_names);
-        int[] priceList = new int[6];
+        float[] priceList = new float[6];
+        float disc = discountValue;
+        float total = 0;
 
         priceList[0] = 460;
         priceList[1] = 400;
@@ -127,9 +133,15 @@ public class ReviewCartActivity extends AppCompatActivity {
                 productName[j].setText(productNameList[i]);
                 amountLabel[j].setText("amount: ");
                 amount[j].setText(Integer.toString(amountOfItem.get(i)));
-                subTotalPrice[j].setText(Integer.toString(amountOfItem.get(i) * priceList[i]));
+                subTotalPrice[j].setText(Float.toString(amountOfItem.get(i) * priceList[i]));
+                total = total + amountOfItem.get(i) * priceList[i];
             }
         }
+
+        total = total * (1-disc);
+        discount.setText(Float.toString(disc));
+        totalPrice.setText(Float.toString(total));
+
     }
 
     @Override
