@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -103,10 +105,15 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
 
+    // Location Service
     private LocationTracker myLocation;
     public String myAddress = null;
     String locationPermission = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION_PERMISSION_ID = 1001;
+
+    // Shake Listener
+    private SensorManager mSensorManager;
+    private ShakeEventListener mSensorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,12 +202,23 @@ public class MainActivity extends AppCompatActivity implements
 
         mAuth = FirebaseAuth.getInstance();
 
+        // Initialize Shake Listener
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorListener = new ShakeEventListener();
+        mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() {
+
+            public void onShake() {
+                minimizeApp();
+            }
+        });
+
         // Just to Log SharefPreferences Key-Values
         Map<String,?> keys = PreferenceManager.getDefaultSharedPreferences(this).getAll();
         for(Map.Entry<String,?> entry : keys.entrySet()){
             Log.d("SharedPrefs",entry.getKey() + ": " +
                     entry.getValue().toString());
         }
+
     }
 
     @Override
@@ -238,6 +256,16 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         hideProgressDialog();
+
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 
     @Override
@@ -554,5 +582,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }
