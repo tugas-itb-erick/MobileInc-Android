@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
+    private final String PROMO_KEY = "promo_key";
 
     // Location Service
     private LocationTracker myLocation;
@@ -143,13 +144,9 @@ public class MainActivity extends AppCompatActivity implements
         tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        //TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
-        //tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final android.support.v4.view.PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
-        //viewPager.setOffscreenPageLimit(1);
-        //tabLayout.removeTabAt(1);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -205,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("SharedPrefs",entry.getKey() + ": " +
                     entry.getValue().toString());
         }
+
+        Toast.makeText(getApplicationContext(),"Press image to view product detail",Toast.LENGTH_LONG).show();
 
     }
 
@@ -329,8 +328,12 @@ public class MainActivity extends AppCompatActivity implements
             Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
             startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_my_qr_code) {
-            Intent myQRIntent = new Intent(getApplicationContext(), YourQRCodeActivity.class);
-            startActivityForResult(myQRIntent,TEXT_REQUEST);
+            if(mPreferences.getString(PROMO_KEY,"").equals("")){
+                Toast.makeText(getApplicationContext(),"You don't have any promotion code",Toast.LENGTH_SHORT).show();
+            }else {
+                Intent myQRIntent = new Intent(getApplicationContext(), YourQRCodeActivity.class);
+                startActivityForResult(myQRIntent, TEXT_REQUEST);
+            }
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
