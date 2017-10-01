@@ -70,10 +70,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".LocationService"
-            android:enabled="true"
-            android:exported="true"></service>
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.test.mock.MockPackageManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +62,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements
@@ -68,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String EXTRA_MESSAGE = "com.chlordane.android.mobileinc.extra.MESSAGE";
+    public static final String EXTRA_NAME = "com.chlordane.android.mobileinc.extra.NAME";
+    public static final String EXTRA_LOCATION = "com.chlordane.android.mobileinc.extra.LOCATION";
     public static final int TEXT_REQUEST = 1;
     private ViewPager mViewPager;
 
@@ -75,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final String ACCOUNT_SUCCESS_TAG = "FirebaseAccountAdd";
     private static final String ACCOUNT_ERROR_TAG = "FirebaseAccountError";
     private static final int RC_SIGN_IN = 9001;
-    private static final int RC_LOCATION_PERMISSION_ID = 1001;
 
     // Authentication
     private GoogleApiClient mGoogleApiClient;
@@ -91,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawer;
 
     private String playerName;
-    private TextView mPlayerNameTextView;
 
     private SharedPreferences mPreferences;
     private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
@@ -104,7 +110,10 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
 
-    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationTracker myLocation;
+    public String myAddress = null;
+    String locationPermission = android.Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final int RC_LOCATION_PERMISSION_ID = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
+                shopIntent.putExtra(EXTRA_NAME, playerName);
+                shopIntent.putExtra(EXTRA_LOCATION, myAddress);
                 startActivityForResult(shopIntent, TEXT_REQUEST);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
@@ -190,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements
             Log.d("SharedPrefs",entry.getKey() + ": " +
                     entry.getValue().toString());
         }
-
     }
 
     @Override
@@ -220,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+
+        getLocation();
     }
 
     @Override
@@ -237,13 +249,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void showProgressDialog() {
-        if (mProgressDialog == null) {
+        /*if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(true);
         }
 
-        mProgressDialog.show();
+        mProgressDialog.show();*/
     }
 
     private void hideProgressDialog() {
@@ -351,14 +363,13 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully
             GoogleSignInAccount acct = result.getSignInAccount();
-            String playerName = acct.getDisplayName();
+            playerName = acct.getDisplayName();
             View v = navigationView.getHeaderView(0);
             TextView nameTextView = (TextView) v.findViewById(R.id.playerName);
             nameTextView.setText(playerName);
 
             firebaseAuthWithGoogle(acct);
             sendNameAndTokenToServer(playerName);
-            startService(new Intent(this, LocationService.class));
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
@@ -455,6 +466,76 @@ public class MainActivity extends AppCompatActivity implements
         };
 
         requestQueue.add(postRequest);
+    }
+
+    private void getLocation(){
+        Log.d(TAG, "getLocation invoked");
+        if (myAddress == null)
+            myAddress = "UNDEFINED";
+
+        // Check Permission
+        checkLocationPermission();
+        myLocation = new LocationTracker(MainActivity.this);
+
+        // check if GPS enabled
+        if(myLocation.canGetLocation()){
+            Log.d(TAG, "getLocation canGetLocation");
+            double latitude = myLocation.getLatitude();
+            double longitude = myLocation.getLongitude();
+
+            // \n is for new line
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent
+                // max location result to returned, by documents it recommended 1 to 5
+
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                myAddress = city + ", " + state;
+                Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            myLocation.showSettingsAlert();
+        }
+    }
+
+    private void checkLocationPermission() {
+        try {
+            Log.d(TAG, "checkLocationPermission invoked");
+
+            if (ActivityCompat.checkSelfPermission(this, locationPermission)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{locationPermission},
+                        RC_LOCATION_PERMISSION_ID);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RC_LOCATION_PERMISSION_ID:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, locationPermission)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    getLocation();
+                }
+        }
     }
 
     @Override
