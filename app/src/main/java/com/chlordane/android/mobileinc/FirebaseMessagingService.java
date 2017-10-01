@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -35,9 +36,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 PendingIntent.FLAG_ONE_SHOT);
 
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
-        String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
-        Uri defaultSoundUri = Uri.parse(strRingtonePreference);
-
         mPreferences = getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
 
@@ -49,18 +47,34 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         }
 
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo_lowres_icon)
-                        .setContentTitle(remoteMessage.getNotification().getTitle())
-                        .setContentText(remoteMessage.getNotification().getBody())
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+        Boolean enabled = preference.getBoolean("notifications_new_message", true);
+        if (enabled) {
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.logo_lowres_icon)
+                            .setContentTitle(remoteMessage.getNotification().getTitle())
+                            .setContentText(remoteMessage.getNotification().getBody())
+                            .setAutoCancel(true)
+                            .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
+            Uri uri = Uri.parse(strRingtonePreference);
+            if (strRingtonePreference.equals("DEFAULT_SOUND")){
+                notificationBuilder.setSound(defaultSoundUri);
+            } else {
+                notificationBuilder.setSound(uri);
+            }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+            Boolean vibratePreference = preference.getBoolean("notifications_new_message_vibrate", true);
+            if (vibratePreference){
+                notificationBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+            }
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        }
     }
 }

@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements
     private SensorManager mSensorManager;
     private ShakeEventListener mSensorListener;
 
+    private Intent service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppThemeMain);
@@ -206,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements
                     entry.getValue().toString());
         }
 
-        startService(new Intent(this, TrendService.class));
     }
 
     @Override
@@ -363,6 +364,10 @@ public class MainActivity extends AppCompatActivity implements
         // Firebase sign out
         mAuth.signOut();
 
+        // Stop Service
+        stopService(service);
+        service = null;
+
         // Google sign out
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
@@ -397,6 +402,12 @@ public class MainActivity extends AppCompatActivity implements
 
             firebaseAuthWithGoogle(acct);
             sendNameAndTokenToServer(playerName);
+
+            // Start Service once
+            if (service == null) {
+                service = new Intent(this, TrendService.class);
+                startService(service);
+            }
         } else {
             int errorCode = result.getStatus().getStatusCode();
             Log.d(TAG, "errorCode = " + Integer.toString(errorCode));
