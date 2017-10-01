@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -155,6 +156,7 @@ public class ReviewCartActivity extends AppCompatActivity {
         amountOfItem.add(mPreferences.getInt(GALAXYS8COUNT_KEY,0));
 
         promoCode = mPreferences.getString(MYQR_KEY,"");
+        Log.d("init test : ", promoCode);
     }
 
     public void printCartData(){
@@ -187,8 +189,9 @@ public class ReviewCartActivity extends AppCompatActivity {
         }
 
         if(!(promoCode.equals(""))) {
+            Log.d("review cart : ", promoCode);
             total = total * (1-disc);
-            discount.setText(Float.toString(disc));
+            discount.setText("0.1");
         }
         else discount.setText("0");
 

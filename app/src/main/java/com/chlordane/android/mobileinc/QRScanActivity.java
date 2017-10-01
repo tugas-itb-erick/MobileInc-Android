@@ -18,7 +18,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -125,11 +124,11 @@ public class QRScanActivity extends AppCompatActivity {
 
                                 if (status.equals("valid")) {
                                     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(QRScanActivity.this);
-                                    sp = getSharedPreferences(MYQRKEY, Context.MODE_PRIVATE);
+                                    sp = getSharedPreferences("com.chlordane.android.mobileinc", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sp.edit();
                                     editor.putString(MYQRKEY, textResult);
                                     editor.apply();
-
+                                    Log.d("qr code : ", sp.getString(MYQRKEY,""));
                                     finish();
                                 } else return;
                             } catch (Exception e) {
