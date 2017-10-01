@@ -24,6 +24,7 @@
     <string name="title_review_cart_activity">My Cart</string>
     <string name="title_shop_activity">Categories</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_promo">Promo</string>
 
     <!-- Strings related to Settings -->
 

@@ -53,7 +53,7 @@
         </activity>
         <activity
             android:name=".QRScanActivity"
-            android:label="Namain donk"
+            android:label="@string/title_activity_promo"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
