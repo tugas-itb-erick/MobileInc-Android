@@ -5,13 +5,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chlordane.android.mobileinc.ReviewCartActivity">
-    <ScrollView
+
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        style="@android:style/ButtonBar">
+
+        <Button android:id="@+id/PaymentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/blue_default_button"
+            android:text="@string/payment_button"
+            android:textColor="#FFFFFF"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"/>
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/creditCardNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bill">
+        android:layout_above="@id/footer"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:hint="Insert you credit card number"
+        android:inputType="number"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/creditCardNumber"
+        android:layout_marginLeft="16dp"
+        android:text="CC number:"
+        android:id="@+id/CCNumberLabel"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/totalPriceAllLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_above="@id/CCNumberLabel"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/totalPriceAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/CCNumberLabel"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true"
+        android:text="0"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/discountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Discount"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_above="@id/totalPriceAllLabel"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
+    <TextView
+        android:id="@+id/discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/totalPriceAllLabel"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true"
+        android:text="0"
+        android:textSize="18sp"/>
+
+    <ScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bill"
+        android:layout_above="@id/discountLabel">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <TextView
                 android:id="@+id/productName1"
                 android:layout_width="match_parent"
@@ -240,87 +325,8 @@
                 android:layout_alignParentRight="true"
                 android:text=""/>
 
-            <TextView
-                android:id="@+id/discountLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Discount"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_below="@id/amount6"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"/>
-            <TextView
-                android:id="@+id/discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/amount6"
-                android:layout_marginRight="16dp"
-                android:layout_alignParentRight="true"
-                android:text="0"
-                android:textSize="18sp"/>
-
-            <TextView
-                android:id="@+id/totalPriceAllLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_below="@id/discountLabel"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"/>
-            <TextView
-                android:id="@+id/totalPriceAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/discountLabel"
-                android:layout_marginRight="16dp"
-                android:layout_alignParentRight="true"
-                android:text="0"
-                android:textSize="24sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/totalPriceAllLabel"
-                android:layout_marginLeft="16dp"
-                android:text="CC number:"
-                android:id="@+id/CCNumberLabel"
-                android:textStyle="bold"
-                android:textSize="16sp"/>
-            <EditText
-                android:id="@+id/creditCardNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/CCNumberLabel"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:hint="Insert you credit card number"
-                android:inputType="number"/>
         </RelativeLayout>
+
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:layout_below="@id/bill"
-        style="@android:style/ButtonBar">
-
-        <Button android:id="@+id/PaymentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/blue_default_button"
-            android:text="@string/payment_button"
-            android:textColor="#FFFFFF"
-            android:paddingTop="5dp"
-            android:paddingBottom="10dp"/>
-    </LinearLayout>
 </RelativeLayout>
