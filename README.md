@@ -1,4 +1,4 @@
-# Mobile,Inc.
+# Mobile, Inc.
 
 ## Anggota kelompok Chlordane
 - Reinhard Benjamin Linardi (13515011)
