@@ -11,11 +11,37 @@
         android:id="@+id/picture"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:layout_centerHorizontal="true" />
     <TextView
-        android:layout_width="336dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:text="By Chlordane"
+        android:id="@+id/by"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
         android:layout_below="@+id/picture"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Reinhard B. Linardi - 13515011"
+        android:id="@+id/reinhard"
+        android:layout_below="@+id/by"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Erick Wijaya - 13515057"
+        android:id="@+id/erick"
+        android:layout_below="@+id/reinhard"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Roland Hartanto - 13515107"
+        android:id="@+id/roland"
+        android:layout_below="@+id/erick"/>
 </RelativeLayout>
