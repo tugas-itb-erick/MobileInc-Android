@@ -6,8 +6,8 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -106,6 +106,8 @@ public class ReviewCartActivity extends AppCompatActivity {
         mPreferences = getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
 
+        amountOfItem = new ArrayList<Integer>(6);
+
         initializeData();
         printCartData();
 
@@ -145,8 +147,6 @@ public class ReviewCartActivity extends AppCompatActivity {
     }
 
     public void initializeData(){
-        amountOfItem = new ArrayList<Integer>(6);
-
         amountOfItem.add(mPreferences.getInt(MI5COUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(MIMAXCOUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(REDMICOUNT_KEY,0));
@@ -208,41 +208,93 @@ public class ReviewCartActivity extends AppCompatActivity {
 
 
     public void payBill(View view) {
+        boolean transactionStatus = false;
+        if(isCartEmpty()){
+            Toast.makeText(getApplicationContext(),"Your cart is empty!",Toast.LENGTH_SHORT).show();
+        }else {
+            if(creditCardNumber.getText().toString().length() < 16){
+                if(creditCardNumber.getText().toString().length() == 0){
+                    Toast.makeText(getApplicationContext(),"Credit card number is required",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Invalid credit card number (16 digits)",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(getApplicationContext(), "Your transaction is being processed...", Toast.LENGTH_LONG).show();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-        // loading + disable button
-        
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
+                                editor.putInt(MI5COUNT_KEY,0);
+                                editor.apply();
+                                editor.putInt(MIMAXCOUNT_KEY,0);
+                                editor.apply();
+                                editor.putInt(REDMICOUNT_KEY,0);
+                                editor.apply();
+                                editor.putInt(GALAXYNOTE8COUNT_KEY,0);
+                                editor.apply();
+                                editor.putInt(GALAXYNOTE5COUNT_KEY,0);
+                                editor.apply();
+                                editor.putInt(GALAXYS8COUNT_KEY,0);
+                                editor.apply();
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), "Transaction failed", Toast.LENGTH_LONG).show();
+                            }
+                        }) {
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("account_name", name);
+                                params.put("city", location);
+                                params.put("promo_code", mPreferences.getString(PROMO_KEY, ""));
+                                params.put("Mi_5", Integer.toString(mPreferences.getInt(MI5COUNT_KEY, 0)));
+                                params.put("Mi_Max", Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY, 0)));
+                                params.put("Redmi_3s", Integer.toString(mPreferences.getInt(REDMICOUNT_KEY, 0)));
+                                params.put("Galaxy_Note_8", Integer.toString(mPreferences.getInt(GALAXYNOTE8COUNT_KEY, 0)));
+                                params.put("Galaxy_Note_5", Integer.toString(mPreferences.getInt(GALAXYNOTE5COUNT_KEY, 0)));
+                                params.put("Galaxy_S8+", Integer.toString(mPreferences.getInt(GALAXYS8COUNT_KEY, 0)));
+
+                                return params;
+                            }
+                        };
+
+                        requestQueue.add(postRequest);
+
+                        int i;
+                        for(i=0;i<6;i++){
+                            amountOfItem.set(i,0);
+                        }
+                        if(isCartEmpty()){
+                            finish();
+                        }
+                    }
+                }, 2000);
             }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // on error
-            }
-        })
-        {
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String,String>();
-                params.put("account_name", name);
-                params.put("city", location);
-                params.put("promo_code",mPreferences.getString(PROMO_KEY,""));
-                params.put("Mi_5",Integer.toString(mPreferences.getInt(MI5COUNT_KEY,0)));
-                params.put("Mi_Max",Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY,0)));
-                params.put("Redmi_3s",Integer.toString(mPreferences.getInt(REDMICOUNT_KEY,0)));
-                params.put("Galaxy_Note_8",Integer.toString(mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)));
-                params.put("Galaxy_Note_5",Integer.toString(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)));
-                params.put("Galaxy_S8+",Integer.toString(mPreferences.getInt(GALAXYS8COUNT_KEY,0)));
+        }
 
-                return params;
-            }
-        };
+    }
 
-        requestQueue.add(postRequest);
+    public boolean isCartEmpty(){
+        int i = 0;
+        boolean empty = true;
+        while((empty)&&(i<6)){
+            if(amountOfItem.get(i) > 0){
+                empty = false;
+            }else{
+                i++;
+            }
+        }
+        return empty;
     }
 
     public void minimizeApp() {

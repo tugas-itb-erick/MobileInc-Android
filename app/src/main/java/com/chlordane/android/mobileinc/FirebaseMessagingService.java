@@ -44,7 +44,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String qrcode = remoteMessage.getData().get("code");
         if (qrcode != null){
 
-            editor.putString("PROMO_KEY",qrcode);
+            editor.putString(PROMO_KEY,qrcode);
             editor.apply();
 
         }

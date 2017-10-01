@@ -3,11 +3,6 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.chlordane.android.mobileinc.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_costumize_color"
-        android:title="@string/pref_header_customize_color" />
-
-    <header
         android:fragment="com.chlordane.android.mobileinc.SettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />

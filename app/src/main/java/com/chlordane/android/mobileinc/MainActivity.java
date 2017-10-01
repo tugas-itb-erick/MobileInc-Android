@@ -585,4 +585,5 @@ public class MainActivity extends AppCompatActivity implements
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
     }
+
 }
