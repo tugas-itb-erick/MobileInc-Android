@@ -75,6 +75,13 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
+        <activity android:name=".YourQRCodeActivity"
+            android:label="My QR code"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.chlordane.android.mobileinc.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

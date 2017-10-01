@@ -12,6 +12,10 @@
             android:title="About" />
         <item
             android:id="@+id/nav_qr_scan"
+            android:icon="@drawable/ic_qr_code_scan"
+            android:title="Scan QR code" />
+        <item
+            android:id="@+id/nav_my_qr_code"
             android:icon="@drawable/ic_qr_code"
             android:title="Promo" />
         <item
