@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -45,20 +46,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static final String THEME_PREFERENCES = "SettingsPrefs" ;
     public static final String ThemeKey = "Theme";
-
-    public static void updateTheme(Context context){
-        Log.d("Settings", "Invoked");
-        String val = PreferenceManager.getDefaultSharedPreferences(context).getString("theme_list", "1");
-        int theme = Integer.parseInt(val);
-        switch (theme) {
-            case 1: context.setTheme(R.style.AppTheme); break;
-            case 2: context.setTheme(R.style.dark); break;
-            case 3: context.setTheme(R.style.dark); break;
-            case 4: context.setTheme(R.style.dark); break;
-            default: context.setTheme(R.style.dark); break;
-        }
-    }
-
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
