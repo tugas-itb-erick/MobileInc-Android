@@ -21,6 +21,7 @@ Subsistem Android merupakan simulasi aplikasi *mobile* dari Mobile, Inc. Subsist
 - Subsistem dapat mengirimkan dan menerima data dari server dengan HttpURLConnection
 
 Homepage : http://mobileinc.herokuapp.com
+Link github backend server : https://github.com/reinhardlinardi/mobile-inc
 
 
 
