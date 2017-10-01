@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class ReviewCartActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
@@ -281,7 +283,6 @@ public class ReviewCartActivity extends AppCompatActivity {
                 }, 2000);
             }
         }
-
     }
 
     public boolean isCartEmpty(){
