@@ -9,9 +9,9 @@
 
 Subsistem Android merupakan simulasi aplikasi *mobile* dari Mobile, Inc. Subsistem ini berperan sebagai *client* yang digunakan untuk melakukan pemesanan produk *handphone*.  Setelah pengguna masuk halaman utama, maka lokasi pengguna akan dicatat dan ditampilkan semua jenis *handphone* yang dapat dibeli. Jika pengguna sudah selesai memilih *handphone*, maka pengguna dapat membuka cart dan melakukan pembayaran. 
 
-## Fitur-fitur subsitem Android
+## Fitur-fitur subsistem Android
 
-- Subsitem memberikan layanan untuk melakukan *sign in* dengan akun Google
+- Subsistem memberikan layanan untuk melakukan *sign in* dengan akun Google
 - Subsistem memiliki tampilan yang responsif dan dapat menyimpan data user saat user memilih *handphone* yang akan dibeli
 - Subsistem dapat menerima notifikasi dari server saat pemesanan sudah diselesaikan
 - Subsistem dapat menerima notifikasi dan data dari server saat server mengirimkan kode promosi
