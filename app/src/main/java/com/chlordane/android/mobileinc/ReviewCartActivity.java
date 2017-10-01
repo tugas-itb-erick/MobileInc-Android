@@ -210,7 +210,7 @@ public class ReviewCartActivity extends AppCompatActivity {
     public void payBill(View view) {
 
         // loading + disable button
-        
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
 

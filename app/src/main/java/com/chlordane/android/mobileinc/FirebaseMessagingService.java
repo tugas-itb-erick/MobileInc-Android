@@ -9,8 +9,19 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by asus on 9/29/2017.
@@ -23,6 +34,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private SharedPreferences.Editor editor;
 
     private final String PROMO_KEY = "promo_key";
+    private String old_qrcode;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -42,9 +54,40 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String qrcode = remoteMessage.getData().get("code");
         if (qrcode != null){
 
-            editor.putString("PROMO_KEY",qrcode);
-            editor.apply();
+            old_qrcode = mPreferences.getString(PROMO_KEY,"");
+            Log.d("QR compare",old_qrcode + "-" + qrcode);
 
+            if(!(old_qrcode.equals("")))
+            {
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                String url = "http://mobileinc.herokuapp.com/api/manage/promotion/delete";
+
+                StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Old QR",old_qrcode);
+                    }
+                },new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // on error
+                    }
+                })
+                {
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String,String>();
+                        params.put("promo_code",old_qrcode);
+
+                        return params;
+                    }
+                };
+
+                requestQueue.add(postRequest);
+            }
+            else Log.d("New QR",qrcode);
+
+            editor.putString(PROMO_KEY,qrcode);
+            editor.apply();
         }
 
         Boolean enabled = preference.getBoolean("notifications_new_message", true);
