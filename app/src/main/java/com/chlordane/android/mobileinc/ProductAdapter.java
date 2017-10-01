@@ -103,9 +103,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         data = "http://www.mi.com/en/mimax/";
                     }else if(mProductName.getText().equals("Redmi 3s")){
                         data = "http://www.mi.com/en/redmi3s/";
-                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB")){
                         data = "http://www.samsung.com/us/mobile/phones/galaxy-note/galaxy-note8-64gb--at-t--orchid-gray-sm-n950uzvaatt/";
-                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB")){
                         data = "http://www.samsung.com/us/mobile/phones/galaxy-note/samsung-galaxy-note5-64gb-at-t-black-sapphire-sm-n920azkeatt/";
                     }else {
                         data = "http://www.samsung.com/us/mobile/phones/galaxy-s/galaxy-s8-plus-64gb--unlocked--sm-g955uzkaxaa/";
@@ -132,10 +132,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }else if(mProductName.getText().equals("Redmi 3s")){
                         currentValue = mPreferences.getInt(REDMICOUNT_KEY,0)+1;
                         editor.putInt(REDMICOUNT_KEY,currentValue);
-                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB")){
                         currentValue = mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)+1;
                         editor.putInt(GALAXYNOTE8COUNT_KEY,currentValue);
-                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB")){
                         currentValue = mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)+1;
                         editor.putInt(GALAXYNOTE5COUNT_KEY,currentValue);
                     }else {
@@ -162,10 +162,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     }else if(mProductName.getText().equals("Redmi 3s")){
                         currentValue = (mPreferences.getInt(REDMICOUNT_KEY,0)==0)? 0:mPreferences.getInt(REDMICOUNT_KEY,0)-1;
                         editor.putInt(REDMICOUNT_KEY,currentValue);
-                    }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note8 64GB")){
                         currentValue = (mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)==0)? 0:mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)-1;
                         editor.putInt(GALAXYNOTE8COUNT_KEY,currentValue);
-                    }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+                    }else if(mProductName.getText().equals("Galaxy Note5 64GB")){
                         currentValue = (mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)==0)? 0:mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)-1;
                         editor.putInt(GALAXYNOTE5COUNT_KEY,currentValue);
                     }else {
@@ -187,9 +187,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 mItemCount.setText(Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY,0)));
             }else if(mProductName.getText().equals("Redmi 3s")){
                 mItemCount.setText(Integer.toString(mPreferences.getInt(REDMICOUNT_KEY,0)));
-            }else if(mProductName.getText().equals("Galaxy Note8 64GB (AT&T)")){
+            }else if(mProductName.getText().equals("Galaxy Note8 64GB")){
                 mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)));
-            }else if(mProductName.getText().equals("Galaxy Note5 64GB (AT&T)")){
+            }else if(mProductName.getText().equals("Galaxy Note5 64GB")){
                 mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)));
             }else {
                 mItemCount.setText(Integer.toString(mPreferences.getInt(GALAXYS8COUNT_KEY,0)));

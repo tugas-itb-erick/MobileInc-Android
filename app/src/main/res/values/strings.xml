@@ -104,18 +104,18 @@
         <item>Mi 5</item>
         <item>Mi Max</item>
         <item>Redmi 3s</item>
-        <item>Galaxy Note8 64GB (AT&amp;T)</item>
-        <item>Galaxy Note5 64GB (AT&amp;T)</item>
-        <item>Galaxy S8+ 64GB (Unlocked)</item>
+        <item>Galaxy Note8 64GB</item>
+        <item>Galaxy Note5 64GB</item>
+        <item>Galaxy S8+ 64GB</item>
     </string-array>
 
     <string-array name="product_descriptions">
-        <item>Price: $ 456</item>
-        <item>Price: $ 402</item>
-        <item>Price: $ 134</item>
+        <item>Price: $ 460</item>
+        <item>Price: $ 400</item>
+        <item>Price: $ 140</item>
         <item>Price: $ 950</item>
         <item>Price: $ 840</item>
-        <item>Price: $ 825</item>
+        <item>Price: $ 820</item>
     </string-array>
 
     <array name="product_images">
