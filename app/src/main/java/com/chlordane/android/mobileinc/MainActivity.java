@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() {
 
             public void onShake() {
-                Toast.makeText(MainActivity.this, "Shake!", Toast.LENGTH_SHORT).show();
+                minimizeApp();
             }
         });
 
@@ -569,5 +569,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }
