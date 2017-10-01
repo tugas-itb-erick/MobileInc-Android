@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements
                     entry.getValue().toString());
         }
 
+        startService(new Intent(this, TrendService.class));
     }
 
     @Override
@@ -518,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
                 myAddress = city + ", " + state;
-                Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }

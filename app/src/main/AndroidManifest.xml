@@ -75,6 +75,10 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
+        <service
+            android:name=".TrendService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
