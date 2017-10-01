@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
-                myAddress = city + ", " + state;
+                myAddress = city;
                 Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();

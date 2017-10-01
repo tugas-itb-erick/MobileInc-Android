@@ -24,7 +24,8 @@
             android:text="@string/payment_button"
             android:textColor="#FFFFFF"
             android:paddingTop="5dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp"
+            android:onClick="payBill"/>
     </LinearLayout>
 
 
