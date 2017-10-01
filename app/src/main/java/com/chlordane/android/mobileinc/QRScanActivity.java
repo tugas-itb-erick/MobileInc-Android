@@ -41,7 +41,7 @@ public class QRScanActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA_PERMISSION_ID = 1001;
     private static final String TAG = "QRScanActivity";
-    public static final String MYQRKEY = "My_QR_Key";
+    public static final String MYQRKEY = "my_qr_key";
 
     private SurfaceView cameraPreview;
     private String textResult;
