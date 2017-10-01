@@ -3,6 +3,8 @@ package com.chlordane.android.mobileinc;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,6 +28,8 @@ import java.util.Map;
 
 public class ReviewCartActivity extends AppCompatActivity {
 
+    private SensorManager mSensorManager;
+    private ShakeEventListener mSensorListener;
     private ArrayList<Integer> amountOfItem;
     private String promoCode;
     private String name;
@@ -104,6 +108,30 @@ public class ReviewCartActivity extends AppCompatActivity {
 
         initializeData();
         printCartData();
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorListener = new ShakeEventListener();
+        mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() {
+
+            public void onShake() {
+                minimizeApp();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 
     private void clearPreviousData() {
@@ -178,14 +206,18 @@ public class ReviewCartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void payBill(View view) {
+
+        // loading + disable button
+        
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // on success
+                Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
             }
         },new Response.ErrorListener() {
             @Override
@@ -211,5 +243,12 @@ public class ReviewCartActivity extends AppCompatActivity {
         };
 
         requestQueue.add(postRequest);
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }

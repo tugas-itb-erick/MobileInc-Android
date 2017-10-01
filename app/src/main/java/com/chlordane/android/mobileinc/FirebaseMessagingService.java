@@ -13,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 /**
  * Created by asus on 9/29/2017.
  */
@@ -33,6 +35,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
         Uri defaultSoundUri = Uri.parse(strRingtonePreference);
+
+        String qrcode = remoteMessage.getData().get("code");
+        if (qrcode != null){
+            // Set to SharedPref
+
+
+            // Send POST to server
+        }
+
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo_lowres_icon)

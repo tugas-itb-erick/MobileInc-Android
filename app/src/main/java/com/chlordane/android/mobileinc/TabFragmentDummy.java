@@ -1,5 +1,6 @@
 package com.chlordane.android.mobileinc;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
@@ -7,4 +8,13 @@ import android.support.v4.app.Fragment;
  */
 
 public class TabFragmentDummy extends Fragment {
+
+    public TabFragmentDummy() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
 }

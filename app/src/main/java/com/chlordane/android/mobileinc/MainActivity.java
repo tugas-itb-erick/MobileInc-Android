@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -24,6 +25,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -103,10 +105,15 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
 
+    // Location Service
     private LocationTracker myLocation;
     public String myAddress = null;
     String locationPermission = android.Manifest.permission.ACCESS_FINE_LOCATION;
     private static final int RC_LOCATION_PERMISSION_ID = 1001;
+
+    // Shake Listener
+    private SensorManager mSensorManager;
+    private ShakeEventListener mSensorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
             }
-        });
+        });*/
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -144,13 +151,18 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
+        //tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab().setText("Samsung"));
         tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        //TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+        //tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final android.support.v4.view.PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         //viewPager.setOffscreenPageLimit(1);
+        //tabLayout.removeTabAt(1);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -190,12 +202,23 @@ public class MainActivity extends AppCompatActivity implements
 
         mAuth = FirebaseAuth.getInstance();
 
+        // Initialize Shake Listener
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorListener = new ShakeEventListener();
+        mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() {
+
+            public void onShake() {
+                minimizeApp();
+            }
+        });
+
         // Just to Log SharefPreferences Key-Values
         Map<String,?> keys = PreferenceManager.getDefaultSharedPreferences(this).getAll();
         for(Map.Entry<String,?> entry : keys.entrySet()){
             Log.d("SharedPrefs",entry.getKey() + ": " +
                     entry.getValue().toString());
         }
+
     }
 
     @Override
@@ -233,6 +256,16 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         hideProgressDialog();
+
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 
     @Override
@@ -276,13 +309,21 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(settingIntent, TEXT_REQUEST);
+        if (id == R.id.action_review_cart) {
+            Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
+            shopIntent.putExtra(EXTRA_NAME, playerName);
+            shopIntent.putExtra(EXTRA_LOCATION, myAddress);
+            startActivityForResult(shopIntent, TEXT_REQUEST);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -541,5 +582,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }

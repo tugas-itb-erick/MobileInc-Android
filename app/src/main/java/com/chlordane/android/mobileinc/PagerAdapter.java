@@ -21,6 +21,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 return new TabFragmentShopAll();
+            //case 1:
+              //  return new TabFragmentDummy();
             case 1:
                 return new TabFragmentShopSamsung();
             case 2:
