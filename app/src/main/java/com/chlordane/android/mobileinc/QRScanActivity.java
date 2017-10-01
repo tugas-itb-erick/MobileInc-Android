@@ -2,10 +2,12 @@ package com.chlordane.android.mobileinc;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,18 +18,30 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class QRScanActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA_PERMISSION_ID = 1001;
     private static final String TAG = "QRScanActivity";
+    public static final String MYQRKEY = "my_qr_key";
 
     private SurfaceView cameraPreview;
     private String textResult;
@@ -96,8 +110,47 @@ public class QRScanActivity extends AppCompatActivity {
                     textResult = qrcodes.valueAt(0).displayValue;
                     Log.d(TAG, "QR Code: " + textResult);
 
-                    // TODO: Send to server, close activity
+                    // If QR not valid, return;
+                    RequestQueue requestQueue = Volley.newRequestQueue(QRScanActivity.this);
+                    String url = "http://mobileinc.herokuapp.com/api/manage/promotion/check";
 
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                String status = jsonObject.get("message").toString();
+
+                                Log.d(TAG, "status: " + status);
+
+                                if (status.equals("valid")) {
+                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(QRScanActivity.this);
+                                    sp = getSharedPreferences(MYQRKEY, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString(MYQRKEY, textResult);
+                                    editor.apply();
+
+                                    finish();
+                                } else return;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            return;
+                        }
+                    }) {
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("promo_code", textResult);
+
+                            return params;
+                        }
+                    };
+
+                    requestQueue.add(postRequest);
                 }
             }
         });
