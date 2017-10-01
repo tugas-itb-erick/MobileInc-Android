@@ -23,7 +23,7 @@ public class YourQRCodeActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.qrCodeImage);
 
         try {
-            Picasso.with(getApplicationContext()).load("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example").into(imageView);
+            Picasso.with(getApplicationContext()).load("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+mPreferences.getString(PROMO_KEY,"")).into(imageView);
         }catch (Exception e){
 
         }
