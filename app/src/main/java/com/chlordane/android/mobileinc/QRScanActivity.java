@@ -10,6 +10,9 @@ import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -31,9 +34,13 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_qrscan);
 
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
+
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
@@ -82,6 +89,9 @@ public class QRScanActivity extends AppCompatActivity {
                 if (qrcodes.size() != 0) {
                     textResult = qrcodes.valueAt(0).displayValue;
                     Log.d(TAG, "QR Code: " + textResult);
+
+                    // TODO: Send to server, close activity
+
                 }
             }
         });
