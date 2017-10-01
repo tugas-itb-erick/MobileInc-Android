@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
     private final String PROMO_KEY = "promo_key";
+    private final String MYQR_KEY = "my_qr_key";
 
     // Location Service
     private LocationTracker myLocation;
@@ -326,8 +327,12 @@ public class MainActivity extends AppCompatActivity implements
             Intent aboutIntent = new Intent(getApplicationContext(), AboutActivity.class);
             startActivityForResult(aboutIntent, TEXT_REQUEST);
         } else if (id == R.id.nav_qr_scan) {
-            Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
-            startActivityForResult(aboutIntent, TEXT_REQUEST);
+            if(mPreferences.getString(MYQR_KEY,"").equals("")) {
+                Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
+                startActivityForResult(aboutIntent, TEXT_REQUEST);
+            }else{
+                Toast.makeText(getApplicationContext(),"You have not used your code",Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_my_qr_code) {
             if(mPreferences.getString(PROMO_KEY,"").equals("")){
                 Toast.makeText(getApplicationContext(),"You don't have any promotion code",Toast.LENGTH_SHORT).show();

@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.android.volley.Request.Method.HEAD;
-
 public class ReviewCartActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
@@ -55,7 +53,7 @@ public class ReviewCartActivity extends AppCompatActivity {
     private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
-    private final String PROMO_KEY = "promo_key";
+    private final String MYQR_KEY = "my_qr_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +154,7 @@ public class ReviewCartActivity extends AppCompatActivity {
         amountOfItem.add(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(GALAXYS8COUNT_KEY,0));
 
-        promoCode = mPreferences.getString(PROMO_KEY,"");
+        promoCode = mPreferences.getString(MYQR_KEY,"");
     }
 
     public void printCartData(){
@@ -258,7 +256,7 @@ public class ReviewCartActivity extends AppCompatActivity {
                                 Map<String, String> params = new HashMap<String, String>();
                                 params.put("account_name", name);
                                 params.put("city", location);
-                                params.put("promo_code", mPreferences.getString(PROMO_KEY, ""));
+                                params.put("promo_code", mPreferences.getString(MYQR_KEY, ""));
                                 params.put("Mi_5", Integer.toString(mPreferences.getInt(MI5COUNT_KEY, 0)));
                                 params.put("Mi_Max", Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY, 0)));
                                 params.put("Redmi_3s", Integer.toString(mPreferences.getInt(REDMICOUNT_KEY, 0)));
@@ -277,6 +275,8 @@ public class ReviewCartActivity extends AppCompatActivity {
                             amountOfItem.set(i,0);
                         }
                         if(isCartEmpty()){
+                            editor.putString(MYQR_KEY,"");
+                            editor.apply();
                             finish();
                         }
                     }
