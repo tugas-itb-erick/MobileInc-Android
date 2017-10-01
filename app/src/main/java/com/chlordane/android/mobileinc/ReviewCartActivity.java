@@ -259,7 +259,7 @@ public class ReviewCartActivity extends AppCompatActivity {
                                 Map<String, String> params = new HashMap<String, String>();
                                 params.put("account_name", name);
                                 params.put("city", location);
-                                params.put("promo_code", mPreferences.getString(MYQR_KEY, ""));
+                                params.put("promo_code", promoCode);
                                 params.put("Mi_5", Integer.toString(mPreferences.getInt(MI5COUNT_KEY, 0)));
                                 params.put("Mi_Max", Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY, 0)));
                                 params.put("Redmi_3s", Integer.toString(mPreferences.getInt(REDMICOUNT_KEY, 0)));
