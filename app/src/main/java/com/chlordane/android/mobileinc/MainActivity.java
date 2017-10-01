@@ -205,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements
 
         Toast.makeText(getApplicationContext(),"Press image to view product detail",Toast.LENGTH_LONG).show();
 
+        startService(new Intent(this, TrendService.class));
+
     }
 
     @Override
@@ -523,8 +525,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
+
                 myAddress = city;
-                Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
