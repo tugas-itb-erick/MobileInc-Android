@@ -2,24 +2,26 @@ package com.chlordane.android.mobileinc;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
-
 /**
  * Created by asus on 9/29/2017.
  */
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+
+    private SharedPreferences mPreferences;
+    private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
+    private SharedPreferences.Editor editor;
+
+    private final String PROMO_KEY = "promo_key";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -36,12 +38,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
         Uri defaultSoundUri = Uri.parse(strRingtonePreference);
 
+        mPreferences = getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
+        editor = mPreferences.edit();
+
         String qrcode = remoteMessage.getData().get("code");
         if (qrcode != null){
-            // Set to SharedPref
 
+            editor.putString("PROMO_KEY",qrcode);
+            editor.apply();
 
-            // Send POST to server
         }
 
         NotificationCompat.Builder notificationBuilder =

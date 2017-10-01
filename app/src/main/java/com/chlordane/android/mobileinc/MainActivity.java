@@ -126,19 +126,6 @@ public class MainActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
-                shopIntent.putExtra(EXTRA_NAME, playerName);
-                shopIntent.putExtra(EXTRA_LOCATION, myAddress);
-                startActivityForResult(shopIntent, TEXT_REQUEST);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-            }
-        });*/
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -342,6 +329,9 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.nav_qr_scan) {
             Intent aboutIntent = new Intent(getApplicationContext(), QRScanActivity.class);
             startActivityForResult(aboutIntent, TEXT_REQUEST);
+        } else if (id == R.id.nav_my_qr_code) {
+            Intent myQRIntent = new Intent(getApplicationContext(), YourQRCodeActivity.class);
+            startActivityForResult(myQRIntent,TEXT_REQUEST);
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
