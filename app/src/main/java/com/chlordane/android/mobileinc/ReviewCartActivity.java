@@ -1,20 +1,39 @@
 package com.chlordane.android.mobileinc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReviewCartActivity extends AppCompatActivity {
 
+    private SensorManager mSensorManager;
+    private ShakeEventListener mSensorListener;
     private ArrayList<Integer> amountOfItem;
-    private float discountValue;
+    private String promoCode;
+    private String name;
+    private String location;
 
     private TextView[] productName;
     private TextView[] amountLabel;
@@ -34,7 +53,7 @@ public class ReviewCartActivity extends AppCompatActivity {
     private final String GALAXYNOTE8COUNT_KEY = "galaxynote8_count";
     private final String GALAXYNOTE5COUNT_KEY = "galaxynote5_count";
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
-    private final String DISCOUNT_KEY = "discount";
+    private final String PROMO_KEY = "promo_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +98,40 @@ public class ReviewCartActivity extends AppCompatActivity {
         totalPrice = (TextView) findViewById(R.id.totalPriceAll);
         creditCardNumber = (EditText) findViewById(R.id.creditCardNumber);
 
+        Intent intent = getIntent();
+        name = intent.getStringExtra(MainActivity.EXTRA_NAME);
+        location = intent.getStringExtra(MainActivity.EXTRA_LOCATION);
+
         clearPreviousData();
         mPreferences = getSharedPreferences(mSharedPrefFile, Context.MODE_PRIVATE);
         editor = mPreferences.edit();
 
         initializeData();
         printCartData();
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorListener = new ShakeEventListener();
+        mSensorListener.setOnShakeListener(new ShakeEventListener.OnShakeListener() {
+
+            public void onShake() {
+                minimizeApp();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
     }
 
     private void clearPreviousData() {
@@ -107,14 +154,13 @@ public class ReviewCartActivity extends AppCompatActivity {
         amountOfItem.add(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0));
         amountOfItem.add(mPreferences.getInt(GALAXYS8COUNT_KEY,0));
 
-        discountValue = mPreferences.getFloat(DISCOUNT_KEY,new Float(0.0));
-
+        promoCode = mPreferences.getString(PROMO_KEY,"");
     }
 
     public void printCartData(){
         String[] productNameList = getResources().getStringArray(R.array.product_names);
         float[] priceList = new float[6];
-        float disc = discountValue;
+        float disc = (float) 0.1;
         float total = 0;
 
         priceList[0] = 460;
@@ -140,8 +186,12 @@ public class ReviewCartActivity extends AppCompatActivity {
             }
         }
 
-        total = total * (1-disc);
-        discount.setText(Float.toString(disc));
+        if(!(promoCode.equals(""))) {
+            total = total * (1-disc);
+            discount.setText(Float.toString(disc));
+        }
+        else discount.setText("0");
+
         totalPrice.setText(Float.toString(total));
 
     }
@@ -154,5 +204,51 @@ public class ReviewCartActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void payBill(View view) {
+
+        // loading + disable button
+        
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
+            }
+        },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // on error
+            }
+        })
+        {
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String,String>();
+                params.put("account_name", name);
+                params.put("city", location);
+                params.put("promo_code",mPreferences.getString(PROMO_KEY,""));
+                params.put("Mi_5",Integer.toString(mPreferences.getInt(MI5COUNT_KEY,0)));
+                params.put("Mi_Max",Integer.toString(mPreferences.getInt(MIMAXCOUNT_KEY,0)));
+                params.put("Redmi_3s",Integer.toString(mPreferences.getInt(REDMICOUNT_KEY,0)));
+                params.put("Galaxy_Note_8",Integer.toString(mPreferences.getInt(GALAXYNOTE8COUNT_KEY,0)));
+                params.put("Galaxy_Note_5",Integer.toString(mPreferences.getInt(GALAXYNOTE5COUNT_KEY,0)));
+                params.put("Galaxy_S8+",Integer.toString(mPreferences.getInt(GALAXYS8COUNT_KEY,0)));
+
+                return params;
+            }
+        };
+
+        requestQueue.add(postRequest);
+    }
+
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 }

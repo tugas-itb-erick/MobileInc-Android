@@ -15,7 +15,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +25,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
             }
-        });
+        });*/
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -151,13 +151,18 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
+        //tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab().setText("Samsung"));
         tabLayout.addTab(tabLayout.newTab().setText("Xiaomi"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        //TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+        //tabHost.getTabWidget().getChildAt(1).setVisibility(View.GONE);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final android.support.v4.view.PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         //viewPager.setOffscreenPageLimit(1);
+        //tabLayout.removeTabAt(1);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -305,13 +310,21 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settingIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(settingIntent, TEXT_REQUEST);
+        if (id == R.id.action_review_cart) {
+            Intent shopIntent = new Intent(getApplicationContext(), ReviewCartActivity.class);
+            shopIntent.putExtra(EXTRA_NAME, playerName);
+            shopIntent.putExtra(EXTRA_LOCATION, myAddress);
+            startActivityForResult(shopIntent, TEXT_REQUEST);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -518,8 +531,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
-                myAddress = city + ", " + state;
-                //Toast.makeText(this, myAddress, Toast.LENGTH_SHORT).show();
+
+                myAddress = city;
             } catch (IOException e) {
                 e.printStackTrace();
             }
