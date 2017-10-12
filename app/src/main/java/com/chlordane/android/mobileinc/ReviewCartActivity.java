@@ -23,6 +23,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -222,32 +224,65 @@ public class ReviewCartActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Invalid credit card number (16 digits)",Toast.LENGTH_SHORT).show();
                 }
             }else {
+				
                 Toast.makeText(getApplicationContext(), "Your transaction is being processed...", Toast.LENGTH_LONG).show();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+						boolean status = false;
                         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                         String url = "http://mobileinc.herokuapp.com/api/manage/order/order";
 
                         StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
-                                editor.putInt(MI5COUNT_KEY,0);
-                                editor.apply();
-                                editor.putInt(MIMAXCOUNT_KEY,0);
-                                editor.apply();
-                                editor.putInt(REDMICOUNT_KEY,0);
-                                editor.apply();
-                                editor.putInt(GALAXYNOTE8COUNT_KEY,0);
-                                editor.apply();
-                                editor.putInt(GALAXYNOTE5COUNT_KEY,0);
-                                editor.apply();
-                                editor.putInt(GALAXYS8COUNT_KEY,0);
-                                editor.apply();
 
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    String message = jsonObject.getString("message");
+
+                                    Log.d("Message",message);
+
+                                    if(message.equals("Promo code either invalid or expired.")) {
+                                        Toast.makeText(getApplicationContext(),"Promo code invalid or expired",Toast.LENGTH_SHORT).show();
+
+                                        editor.putString(MYQR_KEY,"");
+                                        editor.apply();
+                                    }
+                                    else if(message.equals("No item ordered.")) {
+                                        Toast.makeText(getApplicationContext(),"Your cart is empty!",Toast.LENGTH_SHORT).show();
+                                        // jgn reset data, jgn balik ke main activity
+
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(), "Transaction complete!", Toast.LENGTH_LONG).show();
+                                        editor.putInt(MI5COUNT_KEY,0);
+                                        editor.apply();
+                                        editor.putInt(MIMAXCOUNT_KEY,0);
+                                        editor.apply();
+                                        editor.putInt(REDMICOUNT_KEY,0);
+                                        editor.apply();
+                                        editor.putInt(GALAXYNOTE8COUNT_KEY,0);
+                                        editor.apply();
+                                        editor.putInt(GALAXYNOTE5COUNT_KEY,0);
+                                        editor.apply();
+                                        editor.putInt(GALAXYS8COUNT_KEY,0);
+                                        editor.apply();
+
+                                        for(int i=0;i<6;i++){
+                                            amountOfItem.set(i,0);
+                                        }
+
+                                        editor.putString(MYQR_KEY,"");
+                                        editor.apply();
+                                        finish();
+
+                                    }
+                                }
+                                catch(Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -272,16 +307,6 @@ public class ReviewCartActivity extends AppCompatActivity {
                         };
 
                         requestQueue.add(postRequest);
-
-                        int i;
-                        for(i=0;i<6;i++){
-                            amountOfItem.set(i,0);
-                        }
-                        if(isCartEmpty()){
-                            editor.putString(MYQR_KEY,"");
-                            editor.apply();
-                            finish();
-                        }
                     }
                 }, 2000);
             }

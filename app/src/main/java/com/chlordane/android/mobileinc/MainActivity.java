@@ -57,6 +57,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
     private final String PROMO_KEY = "promo_key";
     private final String MYQR_KEY = "my_qr_key";
+    private final String ACCOUNT_NAME = "account_name";
 
     // Location Service
     private LocationTracker myLocation;
@@ -334,12 +337,60 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(),"You have not used your code",Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_my_qr_code) {
-            if(mPreferences.getString(PROMO_KEY,"").equals("")){
-                Toast.makeText(getApplicationContext(),"You don't have any promotion code",Toast.LENGTH_SHORT).show();
-            }else {
-                Intent myQRIntent = new Intent(getApplicationContext(), YourQRCodeActivity.class);
-                startActivityForResult(myQRIntent, TEXT_REQUEST);
-            }
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String url = "http://mobileinc.herokuapp.com/api/manage/promotion/update";
+
+            StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Update response",response);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String message = jsonObject.get("message").toString();
+
+                        if(message.equals("Promotion update success.")) {
+                            editor = mPreferences.edit();
+
+                            String promo_code = jsonObject.get("promo_code").toString();
+
+                            // Save QR code to Shared Preferences
+                            editor.putString(PROMO_KEY,promo_code);
+                            editor.apply();
+
+                            if(mPreferences.getString(PROMO_KEY,"").equals("")){
+                                Toast.makeText(getApplicationContext(),"You don't have any promotion code",Toast.LENGTH_SHORT).show();
+                            }else {
+                                Intent myQRIntent = new Intent(getApplicationContext(), YourQRCodeActivity.class);
+                                startActivityForResult(myQRIntent, TEXT_REQUEST);
+                            }
+                        }
+                        else {
+                            Log.d("Update QR","Invalid Google Account name");
+                        }
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            },new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Update error",error.toString());
+                }
+            })
+            {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String,String>();
+                    params.put("name",mPreferences.getString(ACCOUNT_NAME,""));
+
+                    return params;
+                }
+            };
+
+            requestQueue.add(postRequest);
+
         } else if (id == R.id.nav_sign_out) {
             signOut();
         }
@@ -406,6 +457,9 @@ public class MainActivity extends AppCompatActivity implements
             View v = navigationView.getHeaderView(0);
             TextView nameTextView = (TextView) v.findViewById(R.id.playerName);
             nameTextView.setText(playerName);
+
+            editor.putString(ACCOUNT_NAME, playerName); // Save account name to shared preferences
+            editor.apply();
 
             firebaseAuthWithGoogle(acct);
             sendNameAndTokenToServer(playerName);

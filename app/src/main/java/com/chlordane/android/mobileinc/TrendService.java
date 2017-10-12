@@ -34,7 +34,7 @@ import java.util.TimerTask;
 public class TrendService extends Service {
 
     private static final String TAG = "TrendService";
-    public static final int notify = 600000/10;  // interval between two services(Here Service run every 10 min)
+    public static final int notify = 300000;  // interval between two services (Here Service run every 10 min)
     int count = 0;  // number of times service is displayed
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
