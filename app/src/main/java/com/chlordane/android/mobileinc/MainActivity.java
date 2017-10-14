@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     private final String GALAXYS8COUNT_KEY = "galaxys8_count";
     private final String PROMO_KEY = "promo_key";
     private final String MYQR_KEY = "my_qr_key";
+    private final String NEW_PROMO = "new_promo";
     private final String ACCOUNT_NAME = "account_name";
 
     // Location Service
@@ -351,13 +352,20 @@ public class MainActivity extends AppCompatActivity implements
                         String message = jsonObject.get("message").toString();
 
                         if(message.equals("Promotion update success.")) {
-                            editor = mPreferences.edit();
 
-                            String promo_code = jsonObject.get("promo_code").toString();
+                            boolean is_new = Boolean.parseBoolean(jsonObject.get("is_new").toString());
 
-                            // Save QR code to Shared Preferences
-                            editor.putString(PROMO_KEY,promo_code);
-                            editor.apply();
+                            if(is_new) {
+                                String promo_code = jsonObject.get("promo_code").toString();
+
+                                // Save QR code to Shared Preferences
+                                editor = mPreferences.edit();
+                                editor.putString(PROMO_KEY, promo_code);
+                                editor.putBoolean(NEW_PROMO, true);
+                                editor.apply();
+
+                                Log.d("New promo",Boolean.toString(mPreferences.getBoolean(NEW_PROMO,false)));
+                            }
 
                             if(mPreferences.getString(PROMO_KEY,"").equals("")){
                                 Toast.makeText(getApplicationContext(),"You don't have any promotion code",Toast.LENGTH_SHORT).show();

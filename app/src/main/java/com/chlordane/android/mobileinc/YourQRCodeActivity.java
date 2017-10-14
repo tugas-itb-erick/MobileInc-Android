@@ -25,8 +25,10 @@ public class YourQRCodeActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private static final String mSharedPrefFile = "com.chlordane.android.mobileinc";
+    private SharedPreferences.Editor editor;
     private ImageView imageView;
     private final String PROMO_KEY = "promo_key";
+    private final String NEW_PROMO = "new_promo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,36 +40,46 @@ public class YourQRCodeActivity extends AppCompatActivity {
 
         Log.d("Promo code",mPreferences.getString(PROMO_KEY,""));
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://mobileinc.herokuapp.com/api/manage/promotion/confirm";
+        boolean is_new = mPreferences.getBoolean(NEW_PROMO,false);
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Confirm response",response);
+        if(is_new) {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String url = "http://mobileinc.herokuapp.com/api/manage/promotion/confirm";
 
-                // Move load image here to ensure synchronous actions
-                LoadQRCode(imageView);
-            }
-        },new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Confirm error",error.toString());
+            StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Confirm response", response);
 
-                // Move load image here to ensure synchronous actions
-                LoadQRCode(imageView);
-            }
-        })
-        {
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String,String>();
-                params.put("promo_code",mPreferences.getString(PROMO_KEY,""));
+                    // Move load image here to ensure synchronous actions
+                    LoadQRCode(imageView);
 
-                return params;
-            }
-        };
+                    editor = mPreferences.edit();
+                    editor.putBoolean(NEW_PROMO, false);
+                    editor.apply();
 
-        requestQueue.add(postRequest);
+                    Log.d("New promo",Boolean.toString(mPreferences.getBoolean(NEW_PROMO,false)));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Confirm error", error.toString());
+
+                    // Move load image here to ensure synchronous actions
+                    LoadQRCode(imageView);
+                }
+            }) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("promo_code", mPreferences.getString(PROMO_KEY, ""));
+
+                    return params;
+                }
+            };
+
+            requestQueue.add(postRequest);
+        }
+        else LoadQRCode(imageView);
     }
 
     protected void LoadQRCode(ImageView v)
