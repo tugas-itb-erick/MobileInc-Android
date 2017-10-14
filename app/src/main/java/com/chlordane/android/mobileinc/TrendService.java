@@ -95,33 +95,36 @@ public class TrendService extends Service {
                                     JSONObject remote = new JSONObject(response);
                                     String trending = remote.get("trending").toString();
                                     String orders = remote.get("orders").toString();
+                                    
+                                    if(Integer.parseInt(orders) != 0) {
 
-                                    NotificationCompat.Builder notificationBuilder =
-                                            new NotificationCompat.Builder(TrendService.this)
-                                                    .setSmallIcon(R.drawable.logo_lowres_icon)
-                                                    .setContentTitle(trending + " is Popular!")
-                                                    .setContentText(trending + " has been ordered " + orders + " times! Grab it now fast!")
-                                                    .setAutoCancel(true)
-                                                    .setContentIntent(pendingIntent);
+                                        NotificationCompat.Builder notificationBuilder =
+                                                new NotificationCompat.Builder(TrendService.this)
+                                                        .setSmallIcon(R.drawable.logo_lowres_icon)
+                                                        .setContentTitle(trending + " is Popular!")
+                                                        .setContentText(trending + " has been ordered " + orders + " times! Grab it now fast!")
+                                                        .setAutoCancel(true)
+                                                        .setContentIntent(pendingIntent);
 
-                                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                                    String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
-                                    Uri uri = Uri.parse(strRingtonePreference);
-                                    if (strRingtonePreference.equals("DEFAULT_SOUND")) {
-                                        notificationBuilder.setSound(defaultSoundUri);
-                                    } else {
-                                        notificationBuilder.setSound(uri);
+                                        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                        String strRingtonePreference = preference.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
+                                        Uri uri = Uri.parse(strRingtonePreference);
+                                        if (strRingtonePreference.equals("DEFAULT_SOUND")) {
+                                            notificationBuilder.setSound(defaultSoundUri);
+                                        } else {
+                                            notificationBuilder.setSound(uri);
+                                        }
+
+                                        Boolean vibratePreference = preference.getBoolean("notifications_new_message_vibrate", true);
+                                        if (vibratePreference) {
+                                            notificationBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                                        }
+
+                                        NotificationManager notificationManager =
+                                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                                        notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
                                     }
-
-                                    Boolean vibratePreference = preference.getBoolean("notifications_new_message_vibrate", true);
-                                    if (vibratePreference) {
-                                        notificationBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-                                    }
-
-                                    NotificationManager notificationManager =
-                                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                    notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
