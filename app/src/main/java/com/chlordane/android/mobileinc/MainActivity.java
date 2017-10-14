@@ -599,14 +599,17 @@ public class MainActivity extends AppCompatActivity implements
                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent
                 // max location result to returned, by documents it recommended 1 to 5
 
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
+                Log.d("address",addresses.toString());
 
-                myAddress = city;
+                if(!addresses.isEmpty()) {
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+
+                    myAddress = city;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }else{
             // can't get location
             // GPS or Network is not enabled
