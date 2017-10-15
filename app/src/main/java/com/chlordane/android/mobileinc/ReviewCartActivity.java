@@ -193,9 +193,9 @@ public class ReviewCartActivity extends AppCompatActivity {
         if(!(promoCode.equals(""))) {
             Log.d("review cart : ", promoCode);
             total = total * (1-disc);
-            discount.setText("0.1");
+            discount.setText("10%");
         }
-        else discount.setText("0");
+        else discount.setText("0%");
 
         totalPrice.setText(Float.toString(total));
 

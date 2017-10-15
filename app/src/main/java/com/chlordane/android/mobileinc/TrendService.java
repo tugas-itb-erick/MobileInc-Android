@@ -95,7 +95,7 @@ public class TrendService extends Service {
                                     JSONObject remote = new JSONObject(response);
                                     String trending = remote.get("trending").toString();
                                     String orders = remote.get("orders").toString();
-                                    
+
                                     if(Integer.parseInt(orders) != 0) {
 
                                         NotificationCompat.Builder notificationBuilder =
