@@ -20,11 +20,21 @@ Subsistem Android merupakan simulasi aplikasi *mobile* dari Mobile, Inc. Subsist
 - Subsistem dapat mengecek trend *handphone* saat ini dengan memanfaatkan service
 - Subsistem dapat mengirimkan dan menerima data dari server dengan HttpURLConnection
 
-Homepage : http://mobileinc.herokuapp.com
+## Cara instalasi aplikasi
 
+1. Login menggunakan Webmail STEI
+2. Buka link berikut :
+https://drive.google.com/a/std.stei.itb.ac.id/file/d/0B4a9OEwiZUdLQU1sZXpidW5GMFU/view?usp=sharing
+3. Download APK pada link tersebut
+4. Install pada device yang diinginkan
 
-Link github backend server : https://github.com/reinhardlinardi/mobile-inc
+## Panduan pemakaian aplikasi
 
-
-
-
+1. Login dengan menggunakan Google Account. Jika Google Account yang terdaftar pada device lebih dari satu, maka pilih Google Account yang ingin digunakan.
+2. User akan menerima permission request untuk location services. Pilih Allow untuk melanjutkan.
+3. User akan dibawa ke tampilan utama. Disini user dapat melihat semua jenis handphone yang dapat dipesan. Untuk melakukan filtering terhadap merk handphone, user dapat memilih fragment-fragment yang tersedia. Untuk melihat spesifikasi lengkap dari setiap handphone, user dapat melakukan *tap* pada gambar handphone. Aplikasi akan membuka browser dan membawa user ke official website dari handphone tersebut.
+4. Untuk melakukan pemesanan, atur jumlah pemesanan dari tiap handphone dengan menekan tombol + dan - . Angka yang ada di antara tombol + dan - menunjukkan jumlah handphone yang akan dibeli. Jika sudah selesai, pilih cart di kanan atas, masukan detail kartu kredit dan tekan tombol payment. User akan mendapat notifikasi jika transaksi berhasil dan kembali ke tampilan utama.
+    
+<br /> 
+<br />Homepage : http://mobileinc.herokuapp.com
+<br />API server : https://github.com/reinhardlinardi/mobile-inc
