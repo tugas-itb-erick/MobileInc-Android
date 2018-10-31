@@ -20,11 +20,8 @@ Subsistem Android merupakan simulasi aplikasi *mobile* dari Mobile, Inc. Subsist
 - Subsistem dapat mengirimkan dan menerima data dari server dengan HttpURLConnection
 
 ## Cara instalasi aplikasi
-1. Login menggunakan Webmail STEI
-2. Buka link berikut :
-https://drive.google.com/a/std.stei.itb.ac.id/file/d/0B4a9OEwiZUdLQU1sZXpidW5GMFU/view?usp=sharing
-3. Download APK pada link tersebut
-4. Install pada device yang diinginkan
+1. Download dan extract ZIP dari [MobileInc-Android](https://github.com/tugas-itb-erick/MobileInc-Android/releases). 
+2. Pindahkan file APK ke device Anda dan jalankan APK. 
 
 ## Panduan pemakaian aplikasi
 1. Login dengan menggunakan Google Account. Jika Google Account yang terdaftar pada device lebih dari satu, maka pilih Google Account yang ingin digunakan.
